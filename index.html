@@ -1,0 +1,2103 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TaniSaham – Baheulatani Nusantara</title>
+<meta name="description" content="Platform investasi dan donasi kebun rakyat Indonesia. Pilih tanaman, pantau pertumbuhan, panen bersama petani.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --forest:#1a3d0a; --canopy:#2d6a1f; --leaf:#4a9e30; --moss:#7cc25a;
+  --mist:#c8e8b8; --parch:#f7f2e8; --cream:#fdf9f0;
+  --gold:#c9960a; --gold-lt:#f0c840; --earth:#3d2b0a; --bark:#8b6b35;
+  --ink:#1a1a0a; --muted:#6a6a5a; --faint:#b8b4a8; --white:#ffffff;
+  --r-sm:12px; --r-md:20px; --r-lg:32px;
+  --sh-soft:0 4px 24px rgba(26,61,10,.10);
+  --sh-med:0 8px 40px rgba(26,61,10,.15);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--cream);font-family:'Nunito',sans-serif;color:var(--ink);overflow-x:hidden;}
+
+/* ── TAB NAV ── */
+.tab-bar{
+  position:fixed;bottom:0;left:0;right:0;z-index:1000;
+  background:rgba(253,249,240,.97);backdrop-filter:blur(12px);
+  border-top:1px solid rgba(74,158,48,.15);
+  display:flex;
+}
+.tab-btn{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:3px;padding:10px 4px;
+  border:none;background:transparent;cursor:pointer;
+  font-family:'Nunito',sans-serif;transition:all .2s;
+}
+.tab-btn .t-icon{font-size:20px;line-height:1;}
+.tab-btn .t-label{font-size:9px;font-weight:800;color:var(--faint);letter-spacing:.3px;text-transform:uppercase;}
+.tab-btn.active .t-label{color:var(--canopy);}
+.tab-btn.active .t-icon{transform:scale(1.15);}
+.tab-indicator{
+  position:absolute;top:0;height:2px;background:var(--leaf);
+  border-radius:0 0 4px 4px;transition:left .3s ease;
+}
+
+/* ── PAGES ── */
+.page{display:none;padding-bottom:72px;}
+.page.active{display:block;}
+
+/* ══════════════════════════════════════
+   PAGE 1 — WEBSITE UTAMA
+══════════════════════════════════════ */
+
+/* NAV */
+nav{
+  position:sticky;top:0;z-index:500;
+  padding:14px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(253,249,240,.94);backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(74,158,48,.1);
+}
+.nav-brand{display:flex;align-items:center;gap:9px;text-decoration:none;}
+.nav-logo{
+  width:36px;height:36px;border-radius:9px;
+  background:linear-gradient(135deg,var(--canopy),var(--leaf));
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+}
+.nav-name{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--forest);line-height:1;}
+.nav-sub{font-size:9px;color:var(--muted);font-weight:600;letter-spacing:.4px;}
+.nav-cta{
+  background:var(--canopy);color:white;
+  padding:8px 16px;border-radius:30px;
+  font-size:12px;font-weight:800;border:none;cursor:pointer;
+  font-family:'Nunito',sans-serif;transition:all .2s;
+}
+.nav-cta:hover{background:var(--forest);}
+
+/* HERO */
+.hero{
+  min-height:92vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;padding:80px 20px 50px;
+  position:relative;overflow:hidden;
+  background:linear-gradient(180deg,#0d2206,#1a3d0e 50%,#1f4a12);
+}
+.hero-leaves{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+.lp{position:absolute;border-radius:50% 0 50% 0;animation:floatL linear infinite;}
+@keyframes floatL{
+  0%{transform:translateY(100vh) rotate(0deg);opacity:0;}
+  10%{opacity:1;}90%{opacity:1;}
+  100%{transform:translateY(-100px) rotate(720deg);opacity:0;}
+}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:7px;
+  background:rgba(74,158,48,.15);border:1px solid rgba(124,194,90,.3);
+  border-radius:30px;padding:5px 16px;
+  font-size:10px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;
+  color:var(--moss);margin-bottom:24px;position:relative;
+  animation:fadeUp .8s ease both;
+}
+.edot{width:6px;height:6px;background:var(--moss);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.7);}}
+.hero h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(34px,7vw,68px);font-weight:900;
+  color:#f5ead8;line-height:1.1;margin-bottom:10px;
+  position:relative;animation:fadeUp .8s .1s ease both;
+}
+.hero h1 .brand-line{display:block;font-size:clamp(14px,2.5vw,22px);font-weight:600;color:rgba(245,234,216,.45);font-style:italic;margin-bottom:4px;}
+.hero h1 .green{color:var(--moss);}
+.hero-sub{
+  font-size:clamp(13px,2.2vw,17px);color:rgba(245,234,216,.6);
+  max-width:500px;margin:0 auto 36px;line-height:1.85;
+  position:relative;animation:fadeUp .8s .2s ease both;
+}
+.hero-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:52px;position:relative;animation:fadeUp .8s .3s ease both;}
+.btn-p{
+  display:inline-flex;align-items:center;gap:7px;
+  background:var(--leaf);color:white;
+  padding:13px 26px;border-radius:50px;font-size:14px;font-weight:800;
+  border:none;cursor:pointer;font-family:'Nunito',sans-serif;
+  transition:all .25s;box-shadow:0 4px 20px rgba(74,158,48,.4);
+}
+.btn-p:hover{background:var(--moss);transform:translateY(-2px);}
+.btn-o{
+  display:inline-flex;align-items:center;gap:7px;
+  background:transparent;color:rgba(245,234,216,.8);
+  padding:13px 26px;border-radius:50px;font-size:14px;font-weight:600;
+  border:1.5px solid rgba(245,234,216,.22);cursor:pointer;
+  font-family:'Nunito',sans-serif;transition:all .25s;
+}
+.btn-o:hover{border-color:rgba(245,234,216,.55);color:#f5ead8;}
+.hero-stats{
+  display:flex;
+  background:rgba(255,255,255,.06);border:1px solid rgba(124,194,90,.2);
+  border-radius:var(--r-md);overflow:hidden;
+  position:relative;animation:fadeUp .8s .4s ease both;
+}
+.stat{padding:16px 24px;text-align:center;position:relative;}
+.stat+.stat::before{content:'';position:absolute;left:0;top:20%;bottom:20%;width:1px;background:rgba(124,194,90,.2);}
+.stat-v{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--moss);line-height:1;margin-bottom:3px;}
+.stat-l{font-size:9px;color:rgba(245,234,216,.4);font-weight:700;letter-spacing:.5px;text-transform:uppercase;}
+
+/* SECTIONS */
+.sec{padding:64px 20px;}
+.sec-inner{max-width:900px;margin:0 auto;}
+.sec-tag{
+  display:inline-flex;align-items:center;gap:5px;
+  background:var(--mist);color:var(--canopy);
+  padding:4px 13px;border-radius:20px;
+  font-size:10px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;
+  margin-bottom:14px;
+}
+.sec-title{font-family:'Playfair Display',serif;font-size:clamp(24px,4vw,40px);font-weight:700;color:var(--forest);line-height:1.2;margin-bottom:12px;}
+.sec-title em{color:var(--canopy);font-style:italic;}
+.sec-desc{font-size:14px;color:var(--muted);line-height:1.85;max-width:560px;margin-bottom:40px;}
+
+/* HOW */
+.how-sec{background:var(--parch);}
+.steps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px;}
+.step-card{
+  background:var(--cream);border-radius:var(--r-md);padding:24px 20px;
+  border:1.5px solid rgba(74,158,48,.1);transition:all .3s;
+}
+.step-card:hover{border-color:rgba(74,158,48,.3);box-shadow:var(--sh-soft);transform:translateY(-3px);}
+.sn{font-family:'Playfair Display',serif;font-size:44px;font-weight:900;color:rgba(74,158,48,.1);line-height:1;margin-bottom:10px;}
+.si{font-size:26px;margin-bottom:8px;}
+.st{font-size:14px;font-weight:800;color:var(--forest);margin-bottom:6px;}
+.sd{font-size:12px;color:var(--muted);line-height:1.7;}
+
+/* CATEGORIES */
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:14px;}
+.cat-card{
+  background:var(--parch);border-radius:var(--r-md);padding:20px 14px;
+  text-align:center;border:2px solid transparent;cursor:pointer;transition:all .3s;
+}
+.cat-card:hover{border-color:var(--leaf);transform:translateY(-3px);box-shadow:var(--sh-soft);}
+.ci{font-size:32px;margin-bottom:8px;}
+.cn{font-size:12px;font-weight:800;color:var(--forest);margin-bottom:3px;}
+.cc{font-size:10px;color:var(--muted);}
+.cbadge{display:inline-block;font-size:9px;font-weight:800;padding:2px 8px;border-radius:10px;margin-top:5px;}
+.cb-i{background:rgba(74,158,48,.12);color:var(--canopy);}
+.cb-d{background:rgba(201,150,10,.12);color:var(--gold);}
+
+/* PROJECTS */
+.proj-sec{background:var(--parch);}
+.ptabs{display:flex;gap:8px;margin-bottom:28px;flex-wrap:wrap;}
+.ptab{
+  padding:7px 18px;border-radius:30px;font-size:12px;font-weight:800;
+  border:1.5px solid var(--mist);background:transparent;color:var(--muted);
+  cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s;
+}
+.ptab.active{background:var(--canopy);border-color:var(--canopy);color:white;}
+.proj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;}
+.pcard{
+  background:var(--cream);border-radius:var(--r-md);overflow:hidden;
+  border:1.5px solid rgba(74,158,48,.08);transition:all .3s;cursor:pointer;
+}
+.pcard:hover{box-shadow:var(--sh-med);transform:translateY(-4px);border-color:rgba(74,158,48,.28);}
+.pthumb{height:130px;display:flex;align-items:center;justify-content:center;font-size:52px;position:relative;}
+.pto{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 30%,rgba(26,61,10,.55));}
+.ptbadges{position:absolute;top:9px;left:9px;display:flex;gap:5px;}
+.tbadge{font-size:9px;font-weight:800;padding:3px 8px;border-radius:20px;backdrop-filter:blur(6px);}
+.tb-i{background:rgba(74,158,48,.85);color:white;}
+.tb-d{background:rgba(201,150,10,.85);color:white;}
+.tb-n{background:rgba(255,255,255,.9);color:var(--forest);}
+.pbody{padding:16px;}
+.pcat{font-size:9px;font-weight:800;color:var(--canopy);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;}
+.pname{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--forest);margin-bottom:3px;line-height:1.3;}
+.ploc{font-size:11px;color:var(--muted);margin-bottom:10px;}
+.pbar-wrap{margin-bottom:10px;}
+.pbar-hd{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:4px;}
+.pbar-pct{font-weight:800;color:var(--canopy);}
+.pbar{height:5px;background:var(--mist);border-radius:10px;overflow:hidden;}
+.pbar-fill{height:100%;background:linear-gradient(90deg,var(--leaf),var(--moss));border-radius:10px;}
+.pmeta{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.pm{background:var(--parch);border-radius:9px;padding:7px 9px;}
+.pm-v{font-size:13px;font-weight:800;color:var(--forest);margin-bottom:1px;}
+.pm-l{font-size:9px;color:var(--muted);font-weight:600;}
+
+/* TRANSPARENCY */
+.trans-sec{background:linear-gradient(135deg,var(--forest),#0d2206);}
+.trans-sec .sec-title{color:#f5ead8;}
+.trans-sec .sec-title em{color:var(--moss);}
+.trans-sec .sec-desc{color:rgba(245,234,216,.55);}
+.trans-sec .sec-tag{background:rgba(124,194,90,.15);color:var(--moss);}
+.trans-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+@media(max-width:580px){.trans-grid{grid-template-columns:1fr;}}
+.tcard{background:rgba(255,255,255,.05);border:1px solid rgba(124,194,90,.14);border-radius:var(--r-md);padding:22px;}
+.tc-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:#f5ead8;margin-bottom:18px;}
+.frow{display:flex;align-items:center;gap:9px;margin-bottom:11px;}
+.fl{font-size:11px;color:rgba(245,234,216,.6);width:105px;flex-shrink:0;}
+.fb{flex:1;height:7px;background:rgba(255,255,255,.07);border-radius:10px;overflow:hidden;}
+.ff{height:100%;border-radius:10px;}
+.fp{font-size:11px;font-weight:800;color:var(--moss);width:34px;text-align:right;}
+.plist{list-style:none;}
+.plist li{display:flex;align-items:flex-start;gap:9px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:12px;color:rgba(245,234,216,.7);line-height:1.6;}
+.plist li::before{content:'✓';color:var(--moss);font-weight:800;flex-shrink:0;margin-top:1px;}
+
+/* STORY */
+.story-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;}
+@media(max-width:600px){.story-grid{grid-template-columns:1fr;}}
+.svisual{
+  background:linear-gradient(135deg,var(--forest),var(--canopy));
+  border-radius:var(--r-lg);padding:36px 28px;text-align:center;position:relative;overflow:hidden;
+}
+.svisual::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='50' cy='50' r='40' fill='none' stroke='%234a9e30' stroke-width='.5' opacity='.3'/%3E%3Ccircle cx='50' cy='50' r='25' fill='none' stroke='%234a9e30' stroke-width='.5' opacity='.2'/%3E%3C/svg%3E") center/100px;opacity:.5;}
+.sv-icon{font-size:72px;margin-bottom:14px;position:relative;}
+.sv-q{font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:rgba(245,234,216,.85);line-height:1.65;position:relative;}
+.sv-by{font-size:11px;color:rgba(245,234,216,.4);margin-top:10px;}
+.story-text{font-size:14px;color:var(--muted);line-height:1.9;margin-bottom:16px;}
+.shighlight{background:var(--parch);border-left:3px solid var(--leaf);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:14px 18px;font-size:13px;color:var(--forest);font-weight:600;line-height:1.7;}
+
+/* MODE */
+.mode-sec{background:var(--parch);}
+.mode-cards{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+@media(max-width:520px){.mode-cards{grid-template-columns:1fr;}}
+.mcard{border-radius:var(--r-md);padding:28px 24px;cursor:pointer;transition:all .3s;position:relative;overflow:hidden;}
+.mc-inv{background:linear-gradient(135deg,#e8f5e0,#d4eccc);border:2px solid rgba(74,158,48,.22);}
+.mc-don{background:linear-gradient(135deg,#fdf5e0,#f5e8cc);border:2px solid rgba(201,150,10,.22);}
+.mcard:hover{box-shadow:var(--sh-med);transform:translateY(-3px);}
+.mc-icon{font-size:40px;margin-bottom:14px;}
+.mc-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:7px;}
+.mc-inv .mc-title{color:var(--forest);}
+.mc-don .mc-title{color:var(--earth);}
+.mc-desc{font-size:13px;line-height:1.7;margin-bottom:18px;}
+.mc-inv .mc-desc{color:var(--canopy);}
+.mc-don .mc-desc{color:var(--bark);}
+.mc-perks{list-style:none;margin-bottom:22px;}
+.mc-perks li{font-size:12px;padding:4px 0;display:flex;align-items:center;gap:7px;}
+.mc-inv .mc-perks li{color:var(--forest);}
+.mc-inv .mc-perks li::before{content:'🌱';}
+.mc-don .mc-perks li{color:var(--earth);}
+.mc-don .mc-perks li::before{content:'🤲';}
+.mc-btn{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:11px 22px;border-radius:30px;font-size:13px;font-weight:800;
+  border:none;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s;
+}
+.mc-inv .mc-btn{background:var(--canopy);color:white;}
+.mc-don .mc-btn{background:var(--gold);color:white;}
+
+/* CTA */
+.cta-box{
+  background:linear-gradient(135deg,#0d2206,#1a3d0a,#0d2206);
+  border-radius:var(--r-lg);padding:52px 32px;text-align:center;position:relative;overflow:hidden;
+}
+.cta-box::before{content:'🌳';position:absolute;right:-10px;bottom:-30px;font-size:180px;opacity:.06;pointer-events:none;}
+.cta-title{font-family:'Playfair Display',serif;font-size:clamp(24px,4vw,40px);font-weight:700;color:#f5ead8;margin-bottom:10px;}
+.cta-sub{font-size:14px;color:rgba(245,234,216,.55);margin-bottom:32px;line-height:1.75;}
+.cta-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+
+/* FOOTER */
+footer{background:var(--forest);color:rgba(245,234,216,.55);padding:40px 20px 24px;}
+.footer-inner{max-width:900px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:32px;margin-bottom:24px;}
+@media(max-width:560px){.footer-inner{grid-template-columns:1fr;gap:20px;}}
+.fn{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#f5ead8;margin-bottom:3px;}
+.fs{font-size:11px;color:rgba(245,234,216,.35);margin-bottom:12px;}
+.fd{font-size:12px;line-height:1.8;max-width:260px;}
+.fc{margin-top:14px;}
+.fci{display:flex;align-items:center;gap:7px;font-size:12px;padding:3px 0;}
+.fct{font-size:10px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:var(--moss);margin-bottom:12px;}
+.flinks{list-style:none;}
+.flinks li{padding:4px 0;font-size:12px;}
+.flinks a{color:rgba(245,234,216,.45);text-decoration:none;transition:color .2s;}
+.flinks a:hover{color:var(--moss);}
+.fbot{max-width:900px;margin:0 auto;padding-top:20px;border-top:1px solid rgba(124,194,90,.1);display:flex;justify-content:space-between;font-size:11px;flex-wrap:wrap;gap:6px;}
+
+/* MODAL */
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(13,34,6,.75);backdrop-filter:blur(6px);z-index:2000;align-items:center;justify-content:center;padding:20px;}
+.modal-ov.open{display:flex;}
+.modal{background:var(--cream);border-radius:var(--r-lg);max-width:440px;width:100%;padding:32px 28px;position:relative;animation:mIn .35s cubic-bezier(.34,1.56,.64,1);}
+@keyframes mIn{from{opacity:0;transform:scale(.85) translateY(20px);}to{opacity:1;transform:scale(1) translateY(0);}}
+.mcl{position:absolute;top:14px;right:14px;width:30px;height:30px;background:var(--mist);border:none;border-radius:50%;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .2s;}
+.mcl:hover{background:var(--canopy);color:white;}
+.mtitle{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--forest);margin-bottom:5px;}
+.msub{font-size:12px;color:var(--muted);margin-bottom:20px;line-height:1.6;}
+.mtoggle{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:18px;}
+.mtbtn{padding:9px;border-radius:var(--r-sm);border:2px solid var(--mist);background:transparent;font-size:12px;font-weight:800;cursor:pointer;color:var(--muted);font-family:'Nunito',sans-serif;transition:all .2s;}
+.mtbtn.ai{border-color:var(--leaf);background:var(--mist);color:var(--canopy);}
+.mtbtn.ad{border-color:var(--gold);background:#fdf5e0;color:var(--gold);}
+.fg{margin-bottom:14px;}
+.fl2{display:block;font-size:11px;font-weight:800;color:var(--forest);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px;}
+.fi{width:100%;padding:11px 14px;border:1.5px solid rgba(74,158,48,.18);border-radius:var(--r-sm);font-size:13px;font-family:'Nunito',sans-serif;color:var(--ink);background:white;transition:border-color .2s;}
+.fi:focus{outline:none;border-color:var(--leaf);}
+.binfo{background:var(--parch);border-radius:var(--r-sm);padding:12px 14px;margin-bottom:14px;font-size:12px;}
+.bn{font-weight:800;color:var(--forest);margin-bottom:3px;}
+.bnum{font-size:17px;font-weight:800;color:var(--canopy);letter-spacing:1px;margin-bottom:2px;}
+.bh{color:var(--muted);}
+.sbtn{width:100%;padding:13px;background:var(--canopy);color:white;border:none;border-radius:var(--r-sm);font-size:14px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;transition:all .2s;}
+.sbtn:hover{background:var(--forest);}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* ══════════════════════════════════════
+   PAGE 2 — 7 KONTEN MEDSOS
+══════════════════════════════════════ */
+.p2-header{background:linear-gradient(160deg,#0d2206,#1a4a0d);padding:44px 20px 36px;text-align:center;position:relative;overflow:hidden;}
+.p2-header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(74,158,48,.3),transparent 65%);}
+.p2-tag{display:inline-block;background:rgba(124,194,90,.15);border:1px solid rgba(124,194,90,.3);border-radius:20px;padding:4px 14px;font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--moss);margin-bottom:12px;position:relative;}
+.p2-header h2{font-family:'Playfair Display',serif;font-size:clamp(22px,4vw,38px);font-weight:900;color:#f5ead8;line-height:1.2;position:relative;margin-bottom:8px;}
+.p2-header h2 span{color:var(--moss);}
+.p2-header p{font-size:13px;color:rgba(245,234,216,.5);position:relative;max-width:440px;margin:0 auto;line-height:1.7;}
+
+.konten-wrap{max-width:860px;margin:0 auto;padding:24px 16px;}
+.how-bar{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-bottom:28px;}
+.hw{background:white;border-radius:12px;padding:14px;text-align:center;border:1.5px solid rgba(74,158,48,.1);}
+.hw-icon{font-size:24px;margin-bottom:5px;}
+.hw-t{font-size:12px;font-weight:800;color:var(--forest);margin-bottom:2px;}
+.hw-d{font-size:10px;color:var(--muted);line-height:1.5;}
+
+.day-sec{margin-bottom:24px;}
+.day-hd{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.day-bub{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;flex-shrink:0;flex-direction:column;line-height:1.2;color:white;}
+.day-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--forest);}
+.day-sub{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.8px;}
+
+.day-wrap{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:580px){.day-wrap{grid-template-columns:1fr;}}
+
+.poster{width:100%;aspect-ratio:1;border-radius:18px;overflow:hidden;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;}
+.poster-brand{position:absolute;top:12px;left:12px;background:rgba(255,255,255,.1);backdrop-filter:blur(5px);border:1px solid rgba(255,255,255,.14);border-radius:20px;padding:3px 10px;font-size:9px;font-weight:800;color:rgba(255,255,255,.65);}
+.poster-dtag{position:absolute;top:12px;right:12px;border-radius:20px;padding:3px 9px;font-size:9px;font-weight:800;}
+.poster-icon{font-size:48px;margin-bottom:12px;line-height:1;}
+.poster-q{font-family:'Playfair Display',serif;font-size:clamp(13px,2.2vw,17px);font-weight:700;line-height:1.45;margin-bottom:10px;}
+.poster-s{font-size:10px;font-weight:600;line-height:1.6;opacity:.72;}
+.poster-link{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.18);border-radius:20px;padding:4px 12px;font-size:9px;font-weight:700;color:rgba(255,255,255,.75);white-space:nowrap;}
+
+.copy-col{display:flex;flex-direction:column;gap:10px;}
+.copy-lbl{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:1.3px;color:var(--muted);margin-bottom:1px;}
+.copy-box{background:white;border-radius:14px;padding:16px;border:1.5px solid rgba(74,158,48,.1);flex:1;}
+.copy-text{font-size:12px;line-height:1.9;color:var(--ink);white-space:pre-wrap;font-family:'Nunito',sans-serif;}
+.copy-btn{display:block;width:100%;margin-top:10px;padding:9px;border:none;border-radius:9px;font-size:11px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s;background:var(--mist);color:var(--forest);}
+.copy-btn:hover{filter:brightness(1.08);}
+.ht-box{background:var(--parch);border-radius:11px;padding:10px 13px;font-size:10px;color:var(--canopy);font-weight:700;line-height:1.8;}
+.wa-btn2{display:flex;align-items:center;justify-content:center;gap:7px;padding:11px;background:#25D366;color:white;border:none;border-radius:11px;font-size:12px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;text-decoration:none;transition:all .2s;}
+.wa-btn2:hover{background:#1da851;}
+.day-divider{border:none;border-top:1px dashed #d0c8b8;margin:8px 0 24px;}
+
+/* ══════════════════════════════════════
+   PAGE 3 — PANDUAN FORM & SHEETS
+══════════════════════════════════════ */
+.p3-header{background:linear-gradient(160deg,#0d2206,#1a4a0d);padding:44px 20px 36px;text-align:center;position:relative;overflow:hidden;}
+.p3-header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(74,158,48,.3),transparent 65%);}
+.panduan-wrap{max-width:860px;margin:0 auto;padding:28px 16px 40px;}
+
+.pstep{background:white;border-radius:16px;border:1.5px solid rgba(74,158,48,.1);overflow:hidden;margin-bottom:14px;}
+.pstep-head{display:flex;align-items:center;gap:12px;padding:15px 18px;cursor:pointer;}
+.pstep-num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:white;flex-shrink:0;}
+.pstep-name{font-size:13px;font-weight:800;color:var(--forest);flex:1;}
+.pstep-arrow{font-size:11px;color:var(--muted);transition:transform .2s;}
+.pstep.open .pstep-arrow{transform:rotate(180deg);}
+.pstep-body{display:none;padding:0 18px 18px;border-top:1px solid rgba(74,158,48,.07);}
+.pstep.open .pstep-body{display:block;}
+.pstep-desc{font-size:12px;color:var(--muted);line-height:1.8;margin-bottom:12px;padding-top:13px;}
+.code-box{background:#1a1a0a;border-radius:11px;padding:14px;margin-bottom:10px;position:relative;}
+.code-lbl{font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(124,194,90,.6);margin-bottom:7px;}
+.code-txt{font-family:'Courier New',monospace;font-size:11px;color:#c8e8b8;line-height:1.7;white-space:pre-wrap;word-break:break-all;}
+.code-cp{position:absolute;top:9px;right:9px;background:rgba(74,158,48,.2);border:1px solid rgba(74,158,48,.3);border-radius:7px;padding:3px 9px;font-size:9px;font-weight:800;color:var(--moss);cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s;}
+.code-cp:hover{background:rgba(74,158,48,.35);}
+.tip-b{display:flex;gap:9px;background:var(--mist);border-radius:11px;padding:10px 13px;margin-bottom:10px;}
+.tip-b.warn{background:#fff8e0;}
+.tip-b.imp{background:#ffe8e8;}
+.tip-i{font-size:16px;flex-shrink:0;}
+.tip-t{font-size:11px;color:var(--forest);line-height:1.7;font-weight:600;}
+
+.qitem{background:var(--parch);border-radius:11px;padding:12px 14px;border-left:3px solid var(--canopy);margin-bottom:8px;}
+.qi-cat{font-size:10px;font-weight:800;color:var(--canopy);margin-bottom:3px;}
+.qi-name{font-size:12px;font-weight:800;color:var(--forest);}
+.qi-opt{font-size:11px;color:var(--muted);margin-top:3px;}
+
+/* SECTION TITLES panduan */
+.p3-sec-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--forest);margin:28px 0 16px;display:flex;align-items:center;gap:10px;}
+.p3-sec-title span{font-size:24px;}
+
+/* CHECKLIST */
+.checklist-box{background:linear-gradient(135deg,var(--forest),#0d2206);border-radius:20px;padding:28px;margin-top:32px;}
+.cl-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--moss);margin-bottom:18px;}
+.cl-list{list-style:none;}
+.cl-list li{display:flex;align-items:flex-start;gap:9px;padding:9px 0;border-bottom:1px solid rgba(124,194,90,.1);font-size:12px;line-height:1.6;color:rgba(245,234,216,.78);}
+.cl-list li:last-child{border-bottom:none;}
+.cl-ic{width:20px;height:20px;border-radius:50%;background:rgba(74,158,48,.2);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;margin-top:1px;}
+
+/* TOAST */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--forest);color:white;padding:11px 22px;border-radius:30px;font-size:12px;font-weight:800;transition:transform .35s cubic-bezier(.34,1.56,.64,1);z-index:9999;pointer-events:none;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+
+@media(max-width:480px){
+  .stat{padding:13px 14px;}.stat-v{font-size:20px;}
+  .hero-stats{flex-wrap:wrap;}
+  .hero h1{font-size:32px;}
+}
+
+/* PAGE 4 PERJANJIAN */
+
+:root {
+  --forest: #1a3d0a; --canopy: #2d6a1f; --leaf: #4a9e30; --moss: #7cc25a;
+  --mist: #d4ecc8; --cream: #fdf9f0; --parch: #f5f0e4; --deep-parch: #ede5d0;
+  --gold: #c9960a; --gold-lt: #f0c840; --ink: #1a1a0a; --muted: #6a6a5a;
+  --red: #8b1a1a;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: #e8e0d0; font-family: 'Nunito', sans-serif; color: var(--ink); min-height: 100vh; }
+
+/* ═══ FORM SCREEN ═══ */
+#page4 .form-screen {
+  min-height: 100vh;
+  background: linear-gradient(160deg, #0d2206, #1a4a0d);
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 40px 20px;
+  position: relative; overflow: hidden;
+}
+#page4 .form-screen::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(74,158,48,.3), transparent 65%);
+}
+.form-box {
+  background: var(--cream); border-radius: 28px;
+  max-width: 560px; width: 100%; padding: 40px 36px;
+  position: relative; box-shadow: 0 24px 80px rgba(0,0,0,.35);
+}
+.form-logo {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 28px;
+}
+.flogo-icon {
+  width: 52px; height: 52px; border-radius: 14px;
+  background: linear-gradient(135deg, var(--canopy), var(--leaf));
+  display: flex; align-items: center; justify-content: center; font-size: 26px;
+}
+.flogo-name { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--forest); line-height: 1.1; }
+.flogo-sub  { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+.form-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--forest); margin-bottom: 6px; }
+.form-sub   { font-size: 13px; color: var(--muted); margin-bottom: 28px; line-height: 1.6; }
+
+#page4 .fg { margin-bottom: 18px; }
+#page4 .fg label { display: block; font-size: 11px; font-weight: 800; color: var(--forest); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 6px; }
+#page4 .fg input, #page4 .fg select, #page4 .fg textarea {
+  width: 100%; padding: 12px 16px;
+  border: 1.5px solid rgba(74,158,48,.2); border-radius: 12px;
+  font-size: 13px; font-family: 'Nunito', sans-serif; color: var(--ink);
+  background: var(--parch); transition: border-color .2s;
+}
+.fg input:focus, .fg select:focus, #page4 .fg textarea:focus { outline: none; border-color: var(--leaf); background: white; }
+#page4 .fg textarea { resize: none; height: 72px; }
+#page4 .fg-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+.gen-btn {
+  width: 100%; padding: 15px;
+  background: linear-gradient(135deg, var(--canopy), var(--leaf));
+  color: white; border: none; border-radius: 14px;
+  font-size: 15px; font-weight: 800; font-family: 'Nunito', sans-serif;
+  cursor: pointer; transition: all .25s;
+  box-shadow: 0 6px 20px rgba(74,158,48,.35);
+  margin-top: 6px;
+}
+.gen-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(74,158,48,.45); }
+
+/* ═══ DOC SCREEN ═══ */
+#page4 .doc-screen { display: none; }
+
+#page4 .doc-toolbar {
+  background: var(--forest); padding: 14px 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 10px; position: sticky; top: 0; z-index: 100;
+}
+.dt-left  { display: flex; align-items: center; gap: 10px; }
+.dt-brand { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: #f5ead8; }
+.dt-sub   { font-size: 11px; color: rgba(245,234,216,.45); }
+.dt-btns  { display: flex; gap: 8px; }
+.dt-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 16px; border-radius: 24px;
+  font-size: 12px; font-weight: 800; font-family: 'Nunito', sans-serif;
+  border: none; cursor: pointer; transition: all .2s;
+}
+.btn-back { background: rgba(255,255,255,.1); color: rgba(245,234,216,.7); }
+.btn-back:hover { background: rgba(255,255,255,.18); color: #f5ead8; }
+.btn-print { background: var(--leaf); color: white; box-shadow: 0 3px 10px rgba(74,158,48,.4); }
+.btn-print:hover { background: var(--moss); }
+
+/* ═══ DOCUMENT ═══ */
+#page4 .doc-wrap { max-width: 820px; margin: 32px auto 60px; padding: 0 20px; }
+
+#page4 .document {
+  background: white;
+  box-shadow: 0 8px 40px rgba(0,0,0,.15);
+  position: relative; overflow: hidden;
+}
+
+/* Parchment texture effect */
+#page4 .document::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    repeating-linear-gradient(0deg, transparent, transparent 24px, rgba(26,61,10,.012) 24px, rgba(26,61,10,.012) 25px),
+    repeating-linear-gradient(90deg, transparent, transparent 120px, rgba(26,61,10,.006) 120px, rgba(26,61,10,.006) 121px);
+  pointer-events: none;
+}
+
+/* Kop Surat */
+#page4 .kop {
+  background: linear-gradient(135deg, #0d2206, #1a3d0a);
+  padding: 32px 48px 28px;
+  position: relative; overflow: hidden;
+}
+#page4 .kop::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-lt), var(--gold));
+}
+.kop-inner { display: flex; align-items: center; gap: 20px; }
+.kop-emblem {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold), var(--gold-lt));
+  display: flex; align-items: center; justify-content: center; font-size: 36px;
+  flex-shrink: 0; box-shadow: 0 4px 16px rgba(201,150,10,.4);
+  border: 2px solid rgba(255,255,255,.2);
+}
+.kop-text {}
+.kop-org  { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 900; color: #f5ead8; line-height: 1.1; }
+.kop-full { font-size: 13px; color: rgba(245,234,216,.6); margin-top: 2px; }
+.kop-addr { font-size: 11px; color: rgba(245,234,216,.42); margin-top: 5px; line-height: 1.6; }
+.kop-divider { border: none; border-top: 1px solid rgba(245,234,216,.12); margin: 16px 0 0; }
+
+/* Doc Body */
+#page4 .doc-body { padding: 44px 56px; }
+@media(max-width:600px){ #page4 .doc-body { padding: 28px 24px; } #page4 .kop { padding: 24px 24px 20px; } }
+
+.doc-title-wrap { text-align: center; margin-bottom: 32px; }
+.doc-line { height: 2px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin-bottom: 20px; }
+.doc-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px; font-weight: 900; color: var(--forest);
+  text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px;
+}
+.doc-nomor { font-family: 'Crimson Text', serif; font-size: 14px; color: var(--muted); font-style: italic; }
+
+/* Pihak */
+.pihak-box {
+  background: var(--parch); border-radius: 12px; padding: 20px 22px;
+  border-left: 4px solid var(--canopy); margin-bottom: 16px;
+}
+.pihak-title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--canopy); margin-bottom: 10px; }
+.pihak-row { display: flex; gap: 12px; margin-bottom: 7px; font-size: 13px; }
+.pihak-row:last-child { margin-bottom: 0; }
+.pr-lbl { width: 110px; flex-shrink: 0; color: var(--muted); font-size: 12px; }
+.pr-sep { color: var(--muted); }
+.pr-val { font-weight: 700; color: var(--ink); font-family: 'Crimson Text', serif; font-size: 14px; flex: 1; }
+
+/* Pasal */
+.pasal { margin-bottom: 22px; }
+.pasal-title {
+  font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 700;
+  color: var(--forest); text-align: center; margin-bottom: 10px;
+  padding-bottom: 6px; border-bottom: 1px solid var(--mist);
+}
+.pasal-text {
+  font-family: 'Crimson Text', serif; font-size: 14px; color: var(--ink);
+  line-height: 1.85; text-align: justify;
+}
+.pasal-list { list-style: none; }
+.pasal-list li {
+  font-family: 'Crimson Text', serif; font-size: 14px; color: var(--ink);
+  line-height: 1.8; padding: 4px 0 4px 20px; position: relative;
+}
+.pasal-list li::before { content: attr(data-n); position: absolute; left: 0; font-weight: 600; color: var(--canopy); }
+
+.highlight-box {
+  background: rgba(74,158,48,.07); border: 1.5px solid rgba(74,158,48,.2);
+  border-radius: 10px; padding: 14px 18px; margin: 12px 0;
+}
+.hb-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px dashed rgba(74,158,48,.15); font-size: 13px; }
+.hb-row:last-child { border-bottom: none; }
+.hb-lbl { color: var(--muted); font-family: 'Crimson Text', serif; font-size: 14px; }
+.hb-val { font-weight: 800; color: var(--forest); font-size: 14px; }
+
+/* Tanda Tangan */
+.ttd-section { margin-top: 40px; }
+.ttd-title { font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 700; color: var(--forest); text-align: center; margin-bottom: 24px; }
+.ttd-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+@media(max-width:520px){ .ttd-grid { grid-template-columns: 1fr; } }
+
+.ttd-box { text-align: center; }
+.ttd-role { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--canopy); margin-bottom: 4px; }
+.ttd-label { font-family: 'Crimson Text', serif; font-size: 13px; color: var(--muted); font-style: italic; margin-bottom: 12px; }
+
+.sig-canvas-wrap {
+  border: 1.5px dashed rgba(74,158,48,.4);
+  border-radius: 10px; background: var(--parch);
+  padding: 6px; cursor: crosshair; position: relative;
+  margin-bottom: 8px;
+}
+.sig-canvas { display: block; width: 100%; touch-action: none; }
+.sig-controls { display: flex; gap: 6px; justify-content: center; }
+.sig-ctrl {
+  font-size: 10px; font-weight: 800; padding: 4px 10px; border-radius: 20px;
+  border: none; cursor: pointer; font-family: 'Nunito', sans-serif; transition: all .2s;
+}
+.sc-clear { background: #fde8e8; color: #8b1a1a; }
+.sc-save  { background: var(--mist); color: var(--canopy); }
+
+.sig-saved {
+  border: 1.5px solid rgba(74,158,48,.3);
+  border-radius: 10px; background: white;
+  padding: 6px; margin-bottom: 8px; display: none;
+}
+.sig-saved img { width: 100%; display: block; }
+.sig-saved-label { font-size: 9px; color: rgba(74,158,48,.5); text-align: center; margin-top: 3px; font-style: italic; }
+
+.ttd-name { font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 700; color: var(--ink); margin-top: 6px; border-top: 1.5px solid var(--ink); padding-top: 6px; }
+
+/* METERAI */
+.meterai-wrap { position: relative; display: flex; justify-content: center; align-items: center; margin-bottom: 4px; }
+.meterai {
+  width: 90px; height: 90px; border-radius: 50%;
+  background: linear-gradient(135deg, #b30000, #d40000);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  box-shadow: 0 3px 14px rgba(139,26,26,.4);
+  border: 3px solid rgba(255,255,255,.25);
+  position: relative; overflow: hidden;
+  cursor: pointer; transition: all .2s;
+}
+.meterai:hover { transform: scale(1.04); }
+.meterai::before {
+  content: ''; position: absolute; inset: 6px;
+  border-radius: 50%; border: 1.5px dashed rgba(255,255,255,.3);
+}
+.meterai::after {
+  content: '⭐'; position: absolute; top: 4px; font-size: 10px; opacity: .5;
+}
+.meterai-rp { font-size: 10px; font-weight: 900; color: white; letter-spacing: 1px; line-height: 1; }
+.meterai-val { font-size: 14px; font-weight: 900; color: white; line-height: 1; }
+.meterai-txt { font-size: 7px; font-weight: 800; color: rgba(255,255,255,.7); letter-spacing: .5px; line-height: 1; }
+.meterai-hint { font-size: 9px; color: var(--muted); font-style: italic; text-align: center; margin-top: 3px; }
+.meterai.stamped { animation: stamp .4s cubic-bezier(.36,.07,.19,.97) both; }
+@keyframes stamp { 0%{transform:scale(3);opacity:0;} 60%{transform:scale(.9);} 100%{transform:scale(1);opacity:1;} }
+
+/* Koordinator TTD (pre-filled) */
+.ttd-koordinator {
+  border: 1.5px solid rgba(74,158,48,.25); border-radius: 10px;
+  padding: 10px; background: white; margin-bottom: 8px;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 90px;
+}
+.ttd-kor-inner { text-align: center; }
+.ttd-kor-sig { font-family: 'Playfair Display', serif; font-size: 28px; font-style: italic; color: var(--forest); line-height: 1; transform: rotate(-4deg); display: inline-block; }
+.ttd-kor-note { font-size: 9px; color: rgba(74,158,48,.5); margin-top: 4px; font-style: italic; }
+
+/* Penutup */
+.penutup { text-align: center; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--mist); }
+.penutup-text { font-family: 'Crimson Text', serif; font-size: 13px; color: var(--muted); font-style: italic; line-height: 1.8; }
+
+/* ═══ PRINT ═══ */
+@media print {
+  body { background: white; }
+  #page4 .doc-toolbar { display: none !important; }
+  #page4 .doc-wrap { margin: 0; padding: 0; max-width: 100%; }
+  #page4 .form-screen { display: none !important; }
+  #page4 .doc-screen { display: block !important; }
+  #page4 .document { box-shadow: none; }
+  .sig-controls { display: none; }
+  .sig-canvas-wrap { display: none; }
+  .sig-saved { display: block !important; }
+  .meterai-hint { display: none; }
+  #page4 .doc-body { padding: 32px 48px; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ══════════ PAGE 1: WEBSITE UTAMA ══════════ -->
+<div class="page active" id="page1">
+
+<nav id="mainNav">
+  <a href="#" class="nav-brand">
+    <div class="nav-logo">🌱</div>
+    <div>
+      <div class="nav-name">TaniSaham</div>
+      <div class="nav-sub">Baheulatani Nusantara</div>
+    </div>
+  </a>
+  <button class="nav-cta" onclick="openModal('invest')">Mulai Investasi</button>
+</nav>
+
+<section class="hero" id="home">
+  <div class="hero-leaves" id="heroLeaves"></div>
+  <div class="hero-eyebrow"><span class="edot"></span>Platform Investasi & Donasi Kebun Indonesia</div>
+  <h1>
+    <span class="brand-line">Baheulatani Nusantara</span>
+    Tanam Saham,<br><span class="green">Panen Bersama</span>
+  </h1>
+  <p class="hero-sub">Pilih tanaman sendiri, pantau pertumbuhan langsung dari HP, terima bagi hasil saat panen — atau donasikan untuk membantu petani rakyat Indonesia.</p>
+  <div class="hero-btns">
+    <button class="btn-p" onclick="openModal('invest')">🌱 Mulai Berinvestasi</button>
+    <button class="btn-o" onclick="document.getElementById('proyek').scrollIntoView({behavior:'smooth'})">Lihat Proyek →</button>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-v">5.200+</div><div class="stat-l">Investor</div></div>
+    <div class="stat"><div class="stat-v">24rb+</div><div class="stat-l">Pohon Aktif</div></div>
+    <div class="stat"><div class="stat-v">31%</div><div class="stat-l">ROI Rata-rata</div></div>
+    <div class="stat"><div class="stat-v">6</div><div class="stat-l">Kabupaten</div></div>
+  </div>
+</section>
+
+<!-- MODE -->
+<section class="sec mode-sec">
+  <div class="sec-inner">
+    <div class="sec-tag">✦ Pilih Cara Anda</div>
+    <h2 class="sec-title">Investasi atau <em>Donasi</em>, Anda yang Pilih</h2>
+    <p class="sec-desc">Dua cara berbeda untuk berkontribusi pada pertanian rakyat dan pelestarian hutan Indonesia.</p>
+    <div class="mode-cards">
+      <div class="mcard mc-inv reveal">
+        <div class="mc-icon">💰</div>
+        <div class="mc-title">Mode Investasi</div>
+        <div class="mc-desc">Tanam modal, panen keuntungan. Bagi hasil nyata dari kebun yang Anda pilih sendiri.</div>
+        <ul class="mc-perks">
+          <li>Pilih tanaman & lokasi kebun sendiri</li>
+          <li>Pantau pertumbuhan real-time</li>
+          <li>Terima bagi hasil saat panen</li>
+          <li>ROI rata-rata 25–40% per siklus</li>
+        </ul>
+        <button class="mc-btn" onclick="openModal('invest')">Mulai Investasi →</button>
+      </div>
+      <div class="mcard mc-don reveal">
+        <div class="mc-icon">🤲</div>
+        <div class="mc-title">Mode Donasi</div>
+        <div class="mc-desc">Bantu petani tanpa mengharapkan return finansial. Investasi tulus untuk masa depan pangan bangsa.</div>
+        <ul class="mc-perks">
+          <li>Bantu petani kecil langsung</li>
+          <li>Sertifikat pohon atas nama Anda</li>
+          <li>Update foto dari lapangan</li>
+          <li>Kontribusi nyata pada konservasi hutan</li>
+        </ul>
+        <button class="mc-btn" style="background:var(--gold)" onclick="openModal('donate')">Mulai Donasi →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW -->
+<section class="sec how-sec" id="cara-kerja">
+  <div class="sec-inner">
+    <div class="sec-tag">✦ Cara Kerja</div>
+    <h2 class="sec-title">Semudah <em>Empat Langkah</em></h2>
+    <p class="sec-desc">Dari daftar hingga panen, semua bisa dilakukan dari HP Anda.</p>
+    <div class="steps-grid">
+      <div class="step-card reveal"><div class="sn">01</div><div class="si">📋</div><div class="st">Daftar & Pilih Proyek</div><div class="sd">Daftar lewat WhatsApp atau website. Pilih tanaman dan lokasi kebun yang Anda percaya.</div></div>
+      <div class="step-card reveal"><div class="sn">02</div><div class="si">💳</div><div class="st">Transfer Dana</div><div class="sd">Transfer ke rekening resmi. Semua dana dicatat transparan di laporan publik yang bisa dicek siapapun.</div></div>
+      <div class="step-card reveal"><div class="sn">03</div><div class="si">📸</div><div class="st">Pantau dari HP</div><div class="sd">Petani kirim foto dan laporan pertumbuhan langsung ke dashboard Anda setiap minggu.</div></div>
+      <div class="step-card reveal"><div class="sn">04</div><div class="si">🌾</div><div class="st">Panen & Bagi Hasil</div><div class="sd">Saat panen tiba, bagi hasil langsung ditransfer ke rekening Anda. Transparan dan tepat waktu.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="sec" id="kategori">
+  <div class="sec-inner">
+    <div class="sec-tag">✦ Kategori Kebun</div>
+    <h2 class="sec-title">5 Kategori <em>Pilihan</em></h2>
+    <p class="sec-desc">Pilih sesuai tujuan dan jangka waktu investasi Anda.</p>
+    <div class="cat-grid">
+      <div class="cat-card reveal"><div class="ci">🌿</div><div class="cn">Hortikultura</div><div class="cc">Sayuran & Bumbu</div><div class="cbadge cb-i">Investasi</div></div>
+      <div class="cat-card reveal"><div class="ci">🌽</div><div class="cn">Palawija</div><div class="cc">Jagung & Kacang</div><div class="cbadge cb-i">Investasi</div></div>
+      <div class="cat-card reveal"><div class="ci">🍎</div><div class="cn">Buah-buahan</div><div class="cc">Kopi, Alpukat</div><div class="cbadge cb-i">Investasi</div></div>
+      <div class="cat-card reveal"><div class="ci">🌳</div><div class="cn">Pohon Tahunan</div><div class="cc">Sengon, Jabon</div><div class="cbadge cb-d">Invest+Donasi</div></div>
+      <div class="cat-card reveal"><div class="ci">🐐</div><div class="cn">Ternak Kambing</div><div class="cc">Etawa & Peranakan</div><div class="cbadge cb-i">Investasi</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="sec proj-sec" id="proyek">
+  <div class="sec-inner">
+    <div class="sec-tag">✦ Proyek Aktif</div>
+    <h2 class="sec-title">Kebun yang Menanti <em>Partisipasi Anda</em></h2>
+    <p class="sec-desc">Semua proyek terdokumentasi real-time. Lihat progres sebelum memutuskan.</p>
+    <div class="ptabs">
+      <button class="ptab active" onclick="filterP('semua',this)">Semua</button>
+      <button class="ptab" onclick="filterP('investasi',this)">🌱 Investasi</button>
+      <button class="ptab" onclick="filterP('donasi',this)">🤲 Donasi</button>
+    </div>
+    <div class="proj-grid" id="projGrid"></div>
+  </div>
+</section>
+
+<!-- TRANSPARENCY -->
+<section class="sec trans-sec" id="transparansi">
+  <div class="sec-inner">
+    <div class="sec-tag">✦ Transparansi Dana</div>
+    <h2 class="sec-title">Setiap Rupiah <em>Bisa Dilacak</em></h2>
+    <p class="sec-desc">Kami percaya kepercayaan dibangun dari keterbukaan. Semua distribusi dana dipublikasikan terbuka.</p>
+    <div class="trans-grid">
+      <div class="tcard reveal">
+        <div class="tc-title">📊 Distribusi Dana Tipikal</div>
+        <div class="frow"><span class="fl">Petani</span><div class="fb"><div class="ff" style="width:60%;background:linear-gradient(90deg,#4a9e30,#7cc25a)"></div></div><span class="fp">60%</span></div>
+        <div class="frow"><span class="fl">Investor/Donatur</span><div class="fb"><div class="ff" style="width:20%;background:linear-gradient(90deg,#c9960a,#f0c840)"></div></div><span class="fp">20%</span></div>
+        <div class="frow"><span class="fl">Operasional</span><div class="fb"><div class="ff" style="width:12%;background:rgba(255,255,255,.3)"></div></div><span class="fp">12%</span></div>
+        <div class="frow"><span class="fl">Dana Cadangan</span><div class="fb"><div class="ff" style="width:5%;background:rgba(255,255,255,.2)"></div></div><span class="fp">5%</span></div>
+        <div class="frow"><span class="fl">Platform Fee</span><div class="fb"><div class="ff" style="width:3%;background:rgba(255,255,255,.15)"></div></div><span class="fp">3%</span></div>
+      </div>
+      <div class="tcard reveal">
+        <div class="tc-title">🤝 Komitmen Kami</div>
+        <ul class="plist">
+          <li>Laporan keuangan publik tersedia setiap bulan di Google Sheets</li>
+          <li>Foto dokumentasi kebun dikirim setiap minggu ke semua investor</li>
+          <li>Dana tidak pernah dicampur antar proyek</li>
+          <li>Investor bisa kunjungi kebun kapanpun dengan pemberitahuan 3 hari</li>
+          <li>Bagi hasil ditransfer dalam 7 hari setelah panen terjual</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STORY -->
+<section class="sec" id="tentang">
+  <div class="sec-inner">
+    <div class="sec-tag">✦ Tentang Kami</div>
+    <div class="story-grid">
+      <div class="svisual reveal">
+        <div class="sv-icon">🏔️</div>
+        <div class="sv-q">"Hutan bukan hanya milik mereka yang tinggal di depan layar — hutan adalah jiwa dari mereka yang lahir di bawah naungan pohonnya."</div>
+        <div class="sv-by">— Dari kampung Pasir Ipis, Gunung Guruh, Sukabumi</div>
+      </div>
+      <div class="reveal">
+        <h2 class="sec-title" style="margin-bottom:14px;">Lahir dari <em>Perjuangan</em> Nyata</h2>
+        <p class="story-text">TaniSaham bukan sekadar platform teknologi. Ia lahir dari bertahun-tahun perjuangan mempertahankan hutan rakyat di lereng Gunung Guruh, Sukabumi — melawan ancaman tambang yang hendak mengikis warisan alam bagi generasi mendatang.</p>
+        <p class="story-text">Baheulatani Nusantara meyakini bahwa petani bisa sejahtera karena menjaga hutan, bukan dengan mengorbankannya.</p>
+        <div class="shighlight">🌿 "Jaga Ngariksa Leweung" — menjaga dan memelihara hutan. Program kebun chayote pertama kami di Pasir Ipis, kini membuka pintu bagi siapapun yang ingin ikut menjaga bumi sambil menuai hasilnya.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="sec" style="background:var(--parch);">
+  <div class="sec-inner">
+    <div class="cta-box reveal">
+      <div class="cta-title">Mulai Perjalanan Anda<br>Bersama Kami Hari Ini</div>
+      <p class="cta-sub">Tidak perlu modal besar. Tidak perlu tahu cara bertani.<br>Cukup percaya, pilih, dan pantau dari HP Anda.</p>
+      <div class="cta-btns">
+        <button class="btn-p" onclick="openModal('invest')">🌱 Daftar Sebagai Investor</button>
+        <button class="btn-o" style="color:rgba(245,234,216,.7);border-color:rgba(245,234,216,.2);" onclick="openModal('donate')">🤲 Mulai Donasi</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="fn">TaniSaham</div>
+      <div class="fs">Baheulatani Nusantara</div>
+      <div class="fd">Platform investasi dan donasi kebun rakyat Indonesia. Transparansi penuh, dampak nyata.</div>
+      <div class="fc">
+        <div class="fci">📱 083871666136 (WhatsApp)</div>
+        <div class="fci">🏦 Mandiri 1820016298168 (HUDRI)</div>
+        <div class="fci">📍 Sukabumi, Jawa Barat</div>
+      </div>
+    </div>
+    <div>
+      <div class="fct">Platform</div>
+      <ul class="flinks">
+        <li><a href="#proyek">Proyek Aktif</a></li>
+        <li><a href="#cara-kerja">Cara Kerja</a></li>
+        <li><a href="#transparansi">Transparansi</a></li>
+        <li><a href="#kategori">Kategori</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="fct">Informasi</div>
+      <ul class="flinks">
+        <li><a href="#tentang">Tentang Kami</a></li>
+        <li><a href="#" onclick="switchTab(2);return false;">7 Konten Medsos</a></li>
+        <li><a href="#" onclick="switchTab(3);return false;">Panduan Form</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="fbot">
+    <span>© 2026 TaniSaham – Baheulatani Nusantara. Hak cipta dilindungi.</span>
+    <span>Jaga Ngariksa Leweung 🌿</span>
+  </div>
+</footer>
+
+</div><!-- /page1 -->
+
+<!-- ══════════ PAGE 2: 7 KONTEN ══════════ -->
+<div class="page" id="page2">
+<div class="p2-header">
+  <div class="p2-tag">✦ Konten Siap Posting</div>
+  <h2>7 Hari Konten <span>TaniSaham</span></h2>
+  <p>Instagram · WhatsApp Status · Facebook — screenshot poster, salin caption, posting.</p>
+</div>
+<div class="konten-wrap">
+  <div class="how-bar">
+    <div class="hw"><div class="hw-icon">📅</div><div class="hw-t">1 Hari = 1 Konten</div><div class="hw-d">Posting 1 per hari selama 7 hari</div></div>
+    <div class="hw"><div class="hw-icon">🖼️</div><div class="hw-t">Screenshot Poster</div><div class="hw-d">Screenshot poster untuk gambar Instagram/WA</div></div>
+    <div class="hw"><div class="hw-icon">📋</div><div class="hw-t">Salin Caption</div><div class="hw-d">Klik Salin, paste sebagai caption</div></div>
+    <div class="hw"><div class="hw-icon">📲</div><div class="hw-t">Broadcast WA</div><div class="hw-d">Kirim ke kontak satu per satu, bukan grup</div></div>
+  </div>
+  <div id="kontenList"></div>
+</div>
+</div>
+
+<!-- ══════════ PAGE 3: PANDUAN ══════════ -->
+<div class="page" id="page3">
+<div class="p3-header" style="position:relative;">
+  <div style="position:relative;">
+  <div class="p2-tag">✦ Sistem Operasional Gratis</div>
+  <h2 style="font-family:'Playfair Display',serif;font-size:clamp(22px,4vw,36px);font-weight:900;color:#f5ead8;margin-bottom:8px;">Google Form & Sheets<br><span style="color:var(--moss);">Panduan Lengkap</span></h2>
+  <p style="font-size:13px;color:rgba(245,234,216,.5);max-width:440px;margin:0 auto;line-height:1.7;">Terima investor pertama & catat semua dana secara transparan — Rp 0.</p>
+  </div>
+</div>
+<div class="panduan-wrap">
+
+  <div class="p3-sec-title"><span>📋</span> Bagian 1 — Buat Google Form</div>
+
+  <div class="pstep open" id="ps1">
+    <div class="pstep-head" onclick="togglePS('ps1')">
+      <div class="pstep-num" style="background:var(--canopy)">1</div>
+      <div class="pstep-name">Buka Google Forms</div>
+      <div class="pstep-arrow">▼</div>
+    </div>
+    <div class="pstep-body">
+      <div class="pstep-desc">Buka browser, ketik alamat ini:</div>
+      <div class="code-box"><div class="code-lbl">Alamat Website</div><div class="code-txt">forms.google.com</div><button class="code-cp" onclick="copyC('forms.google.com',this)">Salin</button></div>
+      <div class="tip-b"><div class="tip-i">✅</div><div class="tip-t">Login dengan Gmail Anda. Klik <strong>"+"</strong> atau <strong>"Formulir kosong"</strong>.</div></div>
+    </div>
+  </div>
+
+  <div class="pstep" id="ps2">
+    <div class="pstep-head" onclick="togglePS('ps2')">
+      <div class="pstep-num" style="background:var(--canopy)">2</div>
+      <div class="pstep-name">Isi Judul & Deskripsi Form</div>
+      <div class="pstep-arrow">▼</div>
+    </div>
+    <div class="pstep-body">
+      <div class="pstep-desc">Klik "Formulir tanpa judul" lalu ketik:</div>
+      <div class="code-box"><div class="code-lbl">Judul Form</div><div class="code-txt">📋 Formulir Pendaftaran Investor – TaniSaham Baheulatani Nusantara</div><button class="code-cp" onclick="copyC('📋 Formulir Pendaftaran Investor – TaniSaham Baheulatani Nusantara',this)">Salin</button></div>
+      <div class="pstep-desc">Klik "Deskripsi formulir" lalu ketik:</div>
+      <div class="code-box"><div class="code-lbl">Deskripsi</div><div class="code-txt">Isi formulir dengan lengkap. Tim kami akan menghubungi Anda via WhatsApp dalam 1×24 jam.
+
+📱 WA: 083871666136
+🏦 Mandiri: 1820016298168 (a.n. HUDRI)
+🔗 Web: malviejayagroup-prog.github.io/BTN_Tani_Saham</div><button class="code-cp" onclick="copyC('Isi formulir dengan lengkap. Tim kami akan menghubungi Anda via WhatsApp dalam 1×24 jam.\n\n📱 WA: 083871666136\n🏦 Mandiri: 1820016298168 (a.n. HUDRI)\n🔗 Web: malviejayagroup-prog.github.io/BTN_Tani_Saham',this)">Salin</button></div>
+    </div>
+  </div>
+
+  <div class="pstep" id="ps3">
+    <div class="pstep-head" onclick="togglePS('ps3')">
+      <div class="pstep-num" style="background:var(--canopy)">3</div>
+      <div class="pstep-name">Tambahkan 8 Pertanyaan Ini</div>
+      <div class="pstep-arrow">▼</div>
+    </div>
+    <div class="pstep-body">
+      <div class="pstep-desc">Klik <strong>"+"</strong> di sisi kanan untuk tambah pertanyaan. Buat 8 pertanyaan ini:</div>
+      <div class="tip-b warn"><div class="tip-i">⚠️</div><div class="tip-t">Untuk pertanyaan wajib (*) aktifkan toggle <strong>"Wajib diisi"</strong>.</div></div>
+      <div class="qitem"><div class="qi-cat">1 — Teks singkat · Wajib ⭐</div><div class="qi-name">Nama Lengkap</div></div>
+      <div class="qitem"><div class="qi-cat">2 — Teks singkat · Wajib ⭐</div><div class="qi-name">Nomor WhatsApp Aktif</div></div>
+      <div class="qitem" style="border-color:rgba(74,158,48,.3)"><div class="qi-cat">3 — Teks singkat · Tidak wajib</div><div class="qi-name">Email (opsional)</div></div>
+      <div class="qitem"><div class="qi-cat">4 — Pilihan ganda · Wajib ⭐</div><div class="qi-name">Mode Partisipasi</div><div class="qi-opt">💰 Investasi (bagi hasil) | 🤲 Donasi (bantu petani) | 🌿 Keduanya</div></div>
+      <div class="qitem"><div class="qi-cat">5 — Kotak centang · Wajib ⭐</div><div class="qi-name">Pilih Proyek (boleh lebih dari 1)</div><div class="qi-opt">🌿 Jaga Ngariksa Leweung | 🌽 Jagung Majalengka | ☕ Kopi Gayo | 🐐 Kambing Etawa | 🌳 Sengon Cianjur</div></div>
+      <div class="qitem"><div class="qi-cat">6 — Teks singkat · Wajib ⭐</div><div class="qi-name">Jumlah Dana yang Akan Diinvestasikan/Didonasikan (Rp)</div></div>
+      <div class="qitem" style="border-color:rgba(74,158,48,.3)"><div class="qi-cat">7 — Pilihan ganda · Tidak wajib</div><div class="qi-name">Dari mana mengetahui TaniSaham?</div><div class="qi-opt">Instagram | WhatsApp/Broadcast | Rekomendasi teman | Lainnya</div></div>
+      <div class="qitem" style="border-color:rgba(74,158,48,.3)"><div class="qi-cat">8 — Paragraf · Tidak wajib</div><div class="qi-name">Pesan atau Pertanyaan</div></div>
+    </div>
+  </div>
+
+  <div class="pstep" id="ps4">
+    <div class="pstep-head" onclick="togglePS('ps4')">
+      <div class="pstep-num" style="background:var(--canopy)">4</div>
+      <div class="pstep-name">Atur Pesan Konfirmasi Otomatis</div>
+      <div class="pstep-arrow">▼</div>
+    </div>
+    <div class="pstep-body">
+      <div class="pstep-desc">Klik ⚙️ Setelan → tab <strong>"Presentasi"</strong> → ubah teks konfirmasi:</div>
+      <div class="code-box"><div class="code-lbl">Pesan Konfirmasi</div><div class="code-txt">🌱 Terima kasih mendaftar di TaniSaham – Baheulatani Nusantara!
+
+Tim kami akan menghubungi Anda via WhatsApp (083871666136) dalam 1×24 jam.
+
+Sambil menunggu, kunjungi:
+malviejayagroup-prog.github.io/BTN_Tani_Saham
+
+Jaga Ngariksa Leweung 🌿</div><button class="code-cp" onclick="copyC('🌱 Terima kasih mendaftar di TaniSaham – Baheulatani Nusantara!\n\nTim kami akan menghubungi Anda via WhatsApp (083871666136) dalam 1×24 jam.\n\nSambil menunggu, kunjungi:\nmalviejayagroup-prog.github.io/BTN_Tani_Saham\n\nJaga Ngariksa Leweung 🌿',this)">Salin</button></div>
+    </div>
+  </div>
+
+  <div class="p3-sec-title" style="margin-top:32px;"><span>📊</span> Bagian 2 — Google Sheets Transparansi</div>
+
+  <div class="pstep open" id="ps5">
+    <div class="pstep-head" onclick="togglePS('ps5')">
+      <div class="pstep-num" style="background:var(--gold)">1</div>
+      <div class="pstep-name">Buat Google Sheets Baru</div>
+      <div class="pstep-arrow">▼</div>
+    </div>
+    <div class="pstep-body">
+      <div class="pstep-desc">Buka browser, ketik:</div>
+      <div class="code-box"><div class="code-lbl">Alamat</div><div class="code-txt">sheets.google.com</div><button class="code-cp" onclick="copyC('sheets.google.com',this)">Salin</button></div>
+      <div class="pstep-desc">Klik <strong>"+"</strong> lalu beri nama file:</div>
+      <div class="code-box"><div class="code-lbl">Nama File</div><div class="code-txt">📊 TaniSaham – Laporan Transparansi Dana 2026</div><button class="code-cp" onclick="copyC('📊 TaniSaham – Laporan Transparansi Dana 2026',this)">Salin</button></div>
+    </div>
+  </div>
+
+  <div class="pstep" id="ps6">
+    <div class="pstep-head" onclick="togglePS('ps6')">
+      <div class="pstep-num" style="background:var(--gold)">2</div>
+      <div class="pstep-name">Buat 3 Tab: Investor, Distribusi, Panen</div>
+      <div class="pstep-arrow">▼</div>
+    </div>
+    <div class="pstep-body">
+      <div class="pstep-desc">Di bawah spreadsheet klik <strong>"+"</strong> untuk tambah tab. Buat 3 tab:</div>
+      <div class="tip-b"><div class="tip-i">📋</div><div class="tip-t"><strong>Tab 1: Investor</strong> — Daftar semua investor & status transfer</div></div>
+      <div class="tip-b"><div class="tip-i">💰</div><div class="tip-t"><strong>Tab 2: Distribusi Dana</strong> — Pembagian per proyek (petani 60%, investor 20%, dll)</div></div>
+      <div class="tip-b"><div class="tip-i">🌾</div><div class="tip-t"><strong>Tab 3: Laporan Panen</strong> — Hasil panen dan pembayaran bagi hasil</div></div>
+    </div>
+  </div>
+
+  <div class="pstep" id="ps7">
+    <div class="pstep-head" onclick="togglePS('ps7')">
+      <div class="pstep-num" style="background:var(--gold)">3</div>
+      <div class="pstep-name">⭐ Jadikan Publik (Sangat Penting!)</div>
+      <div class="pstep-arrow">▼</div>
+    </div>
+    <div class="pstep-body">
+      <div class="tip-b imp"><div class="tip-i">🔴</div><div class="tip-t">Ini langkah TERPENTING. Sheets publik = bukti transparansi = investor percaya.</div></div>
+      <div class="tip-b"><div class="tip-i">1️⃣</div><div class="tip-t">Klik tombol <strong>"Bagikan"</strong> (biru) di pojok kanan atas</div></div>
+      <div class="tip-b"><div class="tip-i">2️⃣</div><div class="tip-t">Klik <strong>"Ubah ke siapa saja yang memiliki link"</strong></div></div>
+      <div class="tip-b"><div class="tip-i">3️⃣</div><div class="tip-t">Pilih <strong>"Penampil"</strong> — mereka bisa lihat tapi tidak bisa edit</div></div>
+      <div class="tip-b"><div class="tip-i">4️⃣</div><div class="tip-t">Klik <strong>"Salin Link"</strong> — simpan & bagikan ke semua investor</div></div>
+    </div>
+  </div>
+
+  <div class="p3-sec-title" style="margin-top:32px;"><span>🔗</span> Bagian 3 — Hubungkan Form ke Sheets</div>
+  <div class="pstep open" id="ps8">
+    <div class="pstep-head" onclick="togglePS('ps8')">
+      <div class="pstep-num" style="background:#4a2a9e">→</div>
+      <div class="pstep-name">Data form masuk Sheets otomatis</div>
+      <div class="pstep-arrow">▼</div>
+    </div>
+    <div class="pstep-body">
+      <div class="tip-b"><div class="tip-i">1️⃣</div><div class="tip-t">Buka Google Form → klik tab <strong>"Respons"</strong></div></div>
+      <div class="tip-b"><div class="tip-i">2️⃣</div><div class="tip-t">Klik ikon <strong>Google Sheets hijau</strong> di pojok kanan atas</div></div>
+      <div class="tip-b"><div class="tip-i">3️⃣</div><div class="tip-t">Pilih <strong>"Buat spreadsheet baru"</strong> → klik Buat</div></div>
+      <div class="tip-b"><div class="tip-i">✅</div><div class="tip-t">Selesai! Setiap investor isi form, datanya langsung masuk Sheets otomatis.</div></div>
+      <div class="tip-b warn"><div class="tip-i">🔔</div><div class="tip-t">Aktifkan notifikasi: di tab Respons, klik <strong>⋮</strong> → <strong>"Dapatkan notifikasi email untuk respons baru"</strong></div></div>
+    </div>
+  </div>
+
+  <div class="checklist-box">
+    <div class="cl-title">✅ Semua Siap — Checklist Final</div>
+    <ul class="cl-list">
+      <li><div class="cl-ic">🌐</div>Website TaniSaham live di BTN_Tani_Saham</li>
+      <li><div class="cl-ic">📋</div>Google Form pendaftaran investor sudah dibuat</li>
+      <li><div class="cl-ic">📊</div>Google Sheets transparansi sudah publik</li>
+      <li><div class="cl-ic">🔗</div>Form sudah terhubung ke Sheets — otomatis</li>
+      <li><div class="cl-ic">🔔</div>Notifikasi email diaktifkan</li>
+      <li><div class="cl-ic">📱</div>WA 083871666136 siap menerima konfirmasi</li>
+      <li><div class="cl-ic">🏦</div>Mandiri 1820016298168 siap menerima transfer</li>
+      <li><div class="cl-ic">📲</div>7 konten medsos siap diposting mulai besok</li>
+    </ul>
+    <div style="text-align:center;margin-top:20px;font-family:'Playfair Display',serif;font-size:18px;color:var(--moss);">"Sistem siap. Tinggal investor pertama." 🌱</div>
+  </div>
+</div>
+</div><!-- /page3 -->
+
+
+<!-- ══════════ PAGE 4: PERJANJIAN ══════════ -->
+<div class="page" id="page4">
+
+
+<!-- ══════════ FORM SCREEN ══════════ -->
+<div class="form-screen pj-form-screen" id="formScreen">
+  <div class="form-box">
+    <div class="form-logo">
+      <div class="flogo-icon">🌱</div>
+      <div>
+        <div class="flogo-name">TaniSaham</div>
+        <div class="flogo-sub">Baheulatani Nusantara · Sukabumi</div>
+      </div>
+    </div>
+
+    <div class="form-title">Surat Perjanjian Investasi</div>
+    <div class="form-sub">Isi data di bawah — surat perjanjian resmi akan dibuat otomatis, siap tanda tangan dan cetak.</div>
+
+    <div class="fg-row">
+      <div class="fg">
+        <label>Nama Lengkap Investor ⭐</label>
+        <input id="nama" placeholder="Nama sesuai KTP" required>
+      </div>
+      <div class="fg">
+        <label>Nomor KTP</label>
+        <input id="ktp" placeholder="16 digit NIK">
+      </div>
+    </div>
+
+    <div class="fg-row">
+      <div class="fg">
+        <label>Nomor WhatsApp ⭐</label>
+        <input id="wa" placeholder="08xxxxxxxxxx" required>
+      </div>
+      <div class="fg">
+        <label>Kota / Kabupaten</label>
+        <input id="kota" placeholder="Contoh: Sukabumi">
+      </div>
+    </div>
+
+    <div class="fg">
+      <label>Alamat Lengkap</label>
+      <textarea id="alamat" placeholder="Jalan, RT/RW, Kelurahan, Kecamatan..."></textarea>
+    </div>
+
+    <div class="fg-row">
+      <div class="fg">
+        <label>Pilih Proyek ⭐</label>
+        <select id="proyek">
+          <option value="Jaga Ngariksa Leweung – Chayote Sukabumi">🌿 Jaga Ngariksa – Chayote</option>
+          <option value="Jagung Manis – Majalengka">🌽 Jagung Manis – Majalengka</option>
+          <option value="Kopi Arabica – Gayo Aceh">☕ Kopi Arabica – Gayo</option>
+          <option value="Kambing Etawa – Sukabumi">🐐 Kambing Etawa – Sukabumi</option>
+          <option value="Sengon – Cianjur">🌳 Sengon – Cianjur</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>Nominal Investasi (Rp) ⭐</label>
+        <input id="nominal" type="number" placeholder="Min. 500000" min="500000">
+      </div>
+    </div>
+
+    <div class="fg-row">
+      <div class="fg">
+        <label>Durasi Perjanjian</label>
+        <select id="durasi">
+          <option value="4 (empat) bulan">4 Bulan</option>
+          <option value="3 (tiga) bulan">3 Bulan</option>
+          <option value="6 (enam) bulan">6 Bulan</option>
+          <option value="8 (delapan) bulan">8 Bulan</option>
+          <option value="36 (tiga puluh enam) bulan">36 Bulan</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>ROI / Bagi Hasil Estimasi</label>
+        <select id="roi">
+          <option value="28% (dua puluh delapan persen)">28%</option>
+          <option value="22% (dua puluh dua persen)">22%</option>
+          <option value="35% (tiga puluh lima persen)">35%</option>
+          <option value="40% (empat puluh persen)">40%</option>
+          <option value="45% (empat puluh lima persen)">45%</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="gen-btn" onclick="generateDoc()">
+      📜 Buat Surat Perjanjian Sekarang
+    </button>
+  </div>
+</div>
+
+<!-- ══════════ DOC SCREEN ══════════ -->
+<div class="doc-screen pj-doc-screen" id="docScreen">
+
+  <div class="doc-toolbar">
+    <div class="dt-left">
+      <div>
+        <div class="dt-brand">TaniSaham – Baheulatani Nusantara</div>
+        <div class="dt-sub">Surat Perjanjian Investasi · Siap Cetak</div>
+      </div>
+    </div>
+    <div class="dt-btns">
+      <button class="dt-btn btn-back" onclick="backToForm()">← Kembali</button>
+      <button class="dt-btn btn-print" onclick="window.print()">🖨️ Cetak / Simpan PDF</button>
+    </div>
+  </div>
+
+  <div class="doc-wrap">
+  <div class="document">
+
+    <!-- KOP SURAT -->
+    <div class="kop">
+      <div class="kop-inner">
+        <div class="kop-emblem">🌱</div>
+        <div class="kop-text">
+          <div class="kop-org">BAHEULATANI NUSANTARA</div>
+          <div class="kop-full">Yayasan Bahula Tani Nusantara (Pra-Pendirian)</div>
+          <div class="kop-addr">
+            Kampung Pasir Ipis, Gunung Guruh, Sukabumi, Jawa Barat<br>
+            WhatsApp: 083871666136 · Bank Mandiri: 1820016298168 a.n. HUDRI<br>
+            Web: malviejayagroup-prog.github.io/BTN_Tani_Saham
+          </div>
+        </div>
+      </div>
+      <hr class="kop-divider">
+    </div>
+
+    <!-- DOC BODY -->
+    <div class="doc-body">
+
+      <!-- JUDUL -->
+      <div class="doc-title-wrap">
+        <div class="doc-line"></div>
+        <div class="doc-title">Surat Perjanjian Kerjasama Investasi</div>
+        <div class="doc-nomor" id="docNomor"></div>
+        <div class="doc-line" style="margin-top:16px;"></div>
+      </div>
+
+      <!-- PEMBUKAAN -->
+      <div class="pasal" style="margin-bottom:28px;">
+        <p class="pasal-text">
+          Surat perjanjian ini dibuat dan ditandatangani pada hari <strong id="hariDoc"></strong>, tanggal <strong id="tanggalDoc"></strong>,
+          oleh dan antara pihak-pihak yang disebutkan di bawah ini, dalam keadaan sadar, sehat jasmani dan rohani, serta tanpa paksaan dari pihak manapun.
+        </p>
+      </div>
+
+      <!-- PIHAK I -->
+      <div class="pihak-box">
+        <div class="pihak-title">Pihak Pertama (Pengelola / Koordinator)</div>
+        <div class="pihak-row"><span class="pr-lbl">Nama</span><span class="pr-sep">:</span><span class="pr-val">HUDRI (Malvie)</span></div>
+        <div class="pihak-row"><span class="pr-lbl">Jabatan</span><span class="pr-sep">:</span><span class="pr-val">Koordinator Program – Yayasan Bahula Tani Nusantara</span></div>
+        <div class="pihak-row"><span class="pr-lbl">WhatsApp</span><span class="pr-sep">:</span><span class="pr-val">083871666136</span></div>
+        <div class="pihak-row"><span class="pr-lbl">Rekening</span><span class="pr-sep">:</span><span class="pr-val">Bank Mandiri 1820016298168 a.n. HUDRI</span></div>
+        <div class="pihak-row"><span class="pr-lbl">Berkedudukan</span><span class="pr-sep">:</span><span class="pr-val">Kampung Pasir Ipis, Gunung Guruh, Sukabumi, Jawa Barat</span></div>
+      </div>
+
+      <!-- PIHAK II -->
+      <div class="pihak-box" style="border-color:var(--gold);">
+        <div class="pihak-title" style="color:var(--gold);">Pihak Kedua (Investor)</div>
+        <div class="pihak-row"><span class="pr-lbl">Nama</span><span class="pr-sep">:</span><span class="pr-val" id="pNama">—</span></div>
+        <div class="pihak-row" id="rowKTP"><span class="pr-lbl">Nomor KTP</span><span class="pr-sep">:</span><span class="pr-val" id="pKTP">—</span></div>
+        <div class="pihak-row"><span class="pr-lbl">WhatsApp</span><span class="pr-sep">:</span><span class="pr-val" id="pWA">—</span></div>
+        <div class="pihak-row" id="rowAlamat"><span class="pr-lbl">Alamat</span><span class="pr-sep">:</span><span class="pr-val" id="pAlamat">—</span></div>
+        <div class="pihak-row" id="rowKota"><span class="pr-lbl">Kota/Kab.</span><span class="pr-sep">:</span><span class="pr-val" id="pKota">—</span></div>
+      </div>
+
+      <p class="pasal-text" style="margin-bottom:28px;">
+        Selanjutnya Pihak Pertama disebut sebagai <strong>"Pengelola"</strong> dan Pihak Kedua disebut sebagai <strong>"Investor"</strong>.
+        Kedua pihak sepakat untuk mengadakan perjanjian kerjasama investasi pertanian dengan ketentuan sebagai berikut:
+      </p>
+
+      <!-- PASAL 1 -->
+      <div class="pasal">
+        <div class="pasal-title">PASAL 1 — OBJEK PERJANJIAN</div>
+        <p class="pasal-text">
+          Investor sepakat untuk menempatkan dana investasi pada program pertanian yang dikelola oleh Pengelola melalui platform
+          TaniSaham – Baheulatani Nusantara, dengan rincian proyek sebagai berikut:
+        </p>
+        <div class="highlight-box" style="margin-top:14px;">
+          <div class="hb-row"><span class="hb-lbl">Nama Proyek</span><span class="hb-val" id="hProyek">—</span></div>
+          <div class="hb-row"><span class="hb-lbl">Nominal Investasi</span><span class="hb-val" id="hNominal">—</span></div>
+          <div class="hb-row"><span class="hb-lbl">Estimasi ROI / Bagi Hasil</span><span class="hb-val" id="hROI">—</span></div>
+          <div class="hb-row"><span class="hb-lbl">Durasi Perjanjian</span><span class="hb-val" id="hDurasi">—</span></div>
+          <div class="hb-row"><span class="hb-lbl">Tanggal Mulai</span><span class="hb-val" id="hMulai">—</span></div>
+          <div class="hb-row"><span class="hb-lbl">Estimasi Panen / Berakhir</span><span class="hb-val" id="hAkhir">—</span></div>
+        </div>
+      </div>
+
+      <!-- PASAL 2 -->
+      <div class="pasal">
+        <div class="pasal-title">PASAL 2 — HAK DAN KEWAJIBAN PENGELOLA</div>
+        <ul class="pasal-list">
+          <li data-n="a.">Mengelola dana investasi secara profesional, transparan, dan bertanggung jawab sesuai dengan proyek yang disepakati.</li>
+          <li data-n="b.">Mengirimkan laporan perkembangan kebun berupa foto dan catatan minimal satu kali setiap minggu kepada Investor via WhatsApp.</li>
+          <li data-n="c.">Mendistribusikan hasil panen dan bagi hasil kepada Investor dalam waktu maksimal 7 (tujuh) hari kerja setelah hasil panen terjual.</li>
+          <li data-n="d.">Memublikasikan laporan keuangan secara terbuka melalui Google Sheets yang dapat diakses oleh semua pihak.</li>
+          <li data-n="e.">Memberikan kesempatan kepada Investor untuk mengunjungi lokasi kebun dengan pemberitahuan minimal 3 (tiga) hari sebelumnya.</li>
+        </ul>
+      </div>
+
+      <!-- PASAL 3 -->
+      <div class="pasal">
+        <div class="pasal-title">PASAL 3 — HAK DAN KEWAJIBAN INVESTOR</div>
+        <ul class="pasal-list">
+          <li data-n="a.">Investor berkewajiban menyerahkan dana investasi sebesar nominal yang telah disepakati ke rekening Pengelola sebelum atau pada tanggal yang disepakati.</li>
+          <li data-n="b.">Investor berhak menerima laporan perkembangan kebun secara berkala dan berhak meminta klarifikasi atas laporan tersebut.</li>
+          <li data-n="c.">Investor berhak menerima bagi hasil sesuai persentase yang telah disepakati dalam Pasal 1 perjanjian ini.</li>
+          <li data-n="d.">Investor tidak diperkenankan mengalihkan hak investasinya kepada pihak lain tanpa persetujuan tertulis dari Pengelola.</li>
+        </ul>
+      </div>
+
+      <!-- PASAL 4 -->
+      <div class="pasal">
+        <div class="pasal-title">PASAL 4 — PEMBAGIAN HASIL</div>
+        <p class="pasal-text">Distribusi hasil panen disepakati sebagai berikut:</p>
+        <div class="highlight-box" style="margin-top:12px;">
+          <div class="hb-row"><span class="hb-lbl">🌾 Petani Penggarap</span><span class="hb-val">60%</span></div>
+          <div class="hb-row"><span class="hb-lbl">💰 Investor (Pihak Kedua)</span><span class="hb-val" id="hBagiHasil">20%</span></div>
+          <div class="hb-row"><span class="hb-lbl">⚙️ Biaya Operasional</span><span class="hb-val">12%</span></div>
+          <div class="hb-row"><span class="hb-lbl">🛡️ Dana Cadangan</span><span class="hb-val">5%</span></div>
+          <div class="hb-row"><span class="hb-lbl">🏢 Platform Fee</span><span class="hb-val">3%</span></div>
+        </div>
+      </div>
+
+      <!-- PASAL 5 -->
+      <div class="pasal">
+        <div class="pasal-title">PASAL 5 — RISIKO DAN FORCE MAJEURE</div>
+        <ul class="pasal-list">
+          <li data-n="a.">Investasi pertanian mengandung risiko alami termasuk namun tidak terbatas pada gagal panen akibat cuaca ekstrem, hama, atau bencana alam. Kedua pihak memahami dan menerima risiko ini.</li>
+          <li data-n="b.">Dalam hal terjadi force majeure, Pengelola akan memberitahukan Investor selambatnya 3 (tiga) hari sejak kejadian dan menyusun solusi bersama.</li>
+          <li data-n="c.">Dana cadangan sebesar 5% diperuntukkan sebagai jaring pengaman pertama atas risiko produksi.</li>
+        </ul>
+      </div>
+
+      <!-- PASAL 6 -->
+      <div class="pasal">
+        <div class="pasal-title">PASAL 6 — PENYELESAIAN SENGKETA</div>
+        <p class="pasal-text">
+          Apabila terjadi perselisihan dalam pelaksanaan perjanjian ini, kedua pihak sepakat untuk menyelesaikannya secara musyawarah mufakat terlebih dahulu.
+          Jika tidak tercapai kesepakatan dalam waktu 30 (tiga puluh) hari, penyelesaian dilakukan melalui jalur hukum yang berlaku di wilayah Kabupaten Sukabumi,
+          Jawa Barat, dengan mengutamakan prinsip keadilan dan kekeluargaan.
+        </p>
+      </div>
+
+      <!-- PASAL 7 -->
+      <div class="pasal">
+        <div class="pasal-title">PASAL 7 — PENUTUP</div>
+        <p class="pasal-text">
+          Perjanjian ini dibuat dalam 2 (dua) rangkap yang masing-masing memiliki kekuatan hukum yang sama, satu untuk Pengelola dan satu untuk Investor.
+          Perjanjian ini berlaku sejak ditandatangani oleh kedua pihak dan berakhir setelah seluruh kewajiban kedua pihak terpenuhi sebagaimana tertulis di atas.
+        </p>
+      </div>
+
+      <!-- TANDA TANGAN -->
+      <div class="ttd-section">
+        <div class="ttd-title">TANDA TANGAN PIHAK-PIHAK</div>
+        <p class="pasal-text" style="text-align:center;font-family:'Crimson Text',serif;margin-bottom:24px;font-size:13px;color:var(--muted);">
+          Dibuat di Sukabumi, <span id="ttdTanggal"></span>
+        </p>
+
+        <div class="ttd-grid">
+
+          <!-- PIHAK II: INVESTOR -->
+          <div class="ttd-box">
+            <div class="ttd-role">Pihak Kedua</div>
+            <div class="ttd-label">Investor — Tanda Tangan Digital</div>
+
+            <div class="sig-canvas-wrap" id="canvasWrap2">
+              <canvas class="sig-canvas" id="sigCanvas2" height="90"></canvas>
+            </div>
+            <div class="sig-saved" id="sigSaved2">
+              <img id="sigImg2" alt="Tanda tangan investor">
+              <div class="sig-saved-label">✓ Tanda tangan tersimpan</div>
+            </div>
+            <div class="sig-controls" id="sigCtrl2">
+              <button class="sig-ctrl sc-clear" onclick="clearSig(2)">✕ Hapus</button>
+              <button class="sig-ctrl sc-save" onclick="saveSig(2)">✓ Simpan</button>
+            </div>
+
+            <div class="meterai-wrap" style="margin:12px 0 6px;">
+              <div class="meterai" id="meterai2" onclick="stampMeterai(2)" title="Klik untuk tempel meterai">
+                <div class="meterai-rp">Rp.</div>
+                <div class="meterai-val">10.000</div>
+                <div class="meterai-txt">METERAI</div>
+              </div>
+            </div>
+            <div class="meterai-hint" id="metHint2">Klik meterai untuk menempel</div>
+
+            <div class="ttd-name" id="ttdNama">________________</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:3px;" id="ttdKtp"></div>
+          </div>
+
+          <!-- PIHAK I: KOORDINATOR -->
+          <div class="ttd-box">
+            <div class="ttd-role">Pihak Pertama</div>
+            <div class="ttd-label">Koordinator Pengelola</div>
+
+            <div class="ttd-koordinator">
+              <div class="ttd-kor-inner">
+                <div class="ttd-kor-sig">Hudri</div>
+                <div class="ttd-kor-note">Tanda tangan digital koordinator</div>
+              </div>
+            </div>
+
+            <div class="meterai-wrap" style="margin:12px 0 6px;">
+              <div class="meterai" id="meterai1" onclick="stampMeterai(1)" title="Klik untuk tempel meterai">
+                <div class="meterai-rp">Rp.</div>
+                <div class="meterai-val">10.000</div>
+                <div class="meterai-txt">METERAI</div>
+              </div>
+            </div>
+            <div class="meterai-hint" id="metHint1">Klik meterai untuk menempel</div>
+
+            <div class="ttd-name">HUDRI (Malvie)</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:3px;">Koordinator – Baheulatani Nusantara</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- PENUTUP -->
+      <div class="penutup">
+        <p class="penutup-text">
+          "Dan Kami telah hampirkan bumi ini dan Kami jadikan kamu mewarisi bumi itu — maka alangkah baiknya balasan bagi orang-orang yang beramal." — (QS. Az-Zumar: 74)<br><br>
+          <em>Jaga Ngariksa Leweung · Baheulatani Nusantara · 2026</em>
+        </p>
+      </div>
+
+    </div><!-- /doc-body -->
+  </div><!-- /document -->
+  </div><!-- /doc-wrap -->
+
+</div><!-- /doc-screen -->
+
+<script>
+// ── GENERATE DOC ──
+function generateDoc() {
+  const nama    = document.getElementById('nama').value.trim();
+  const wa      = document.getElementById('wa').value.trim();
+  const nominal = parseFloat(document.getElementById('nominal').value);
+
+  if (!nama) { alert('Nama investor wajib diisi.'); return; }
+  if (!wa)   { alert('Nomor WhatsApp wajib diisi.'); return; }
+  if (!nominal || nominal < 500000) { alert('Nominal investasi minimal Rp 500.000.'); return; }
+
+  const ktp     = document.getElementById('ktp').value.trim();
+  const kota    = document.getElementById('kota').value.trim();
+  const alamat  = document.getElementById('alamat').value.trim();
+  const proyek  = document.getElementById('proyek').value;
+  const durasi  = document.getElementById('durasi').value;
+  const roi     = document.getElementById('roi').value;
+
+  // Tanggal
+  const now    = new Date();
+  const bulan  = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  const hari   = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  const hariNm = hari[now.getDay()];
+  const tgl    = `${now.getDate()} ${bulan[now.getMonth()]} ${now.getFullYear()}`;
+
+  // Estimasi akhir
+  const bln    = parseInt(durasi);
+  const akhir  = new Date(now);
+  akhir.setMonth(akhir.getMonth() + bln);
+  const tglAkhir = `${akhir.getDate()} ${bulan[akhir.getMonth()]} ${akhir.getFullYear()}`;
+
+  // Nomor surat
+  const nomo = `No. BTN-${String(now.getFullYear()).slice(-2)}${String(now.getMonth()+1).padStart(2,'0')}-${String(Math.floor(Math.random()*9000)+1000)}`;
+
+  // Nominal terbilang (simple)
+  const nomFmt = 'Rp ' + nominal.toLocaleString('id-ID') + ',-';
+
+  // Fill doc
+  document.getElementById('docNomor').textContent   = nomo;
+  document.getElementById('hariDoc').textContent    = hariNm;
+  document.getElementById('tanggalDoc').textContent = tgl;
+  document.getElementById('ttdTanggal').textContent = tgl;
+
+  document.getElementById('pNama').textContent  = nama.toUpperCase();
+  document.getElementById('pWA').textContent    = wa;
+  document.getElementById('ttdNama').textContent = nama.toUpperCase();
+
+  if (ktp) { document.getElementById('pKTP').textContent = ktp; document.getElementById('ttdKtp').textContent = 'NIK: '+ktp; }
+  else      { document.getElementById('rowKTP').style.display='none'; }
+
+  if (alamat) document.getElementById('pAlamat').textContent = alamat;
+  else        document.getElementById('rowAlamat').style.display='none';
+
+  if (kota) document.getElementById('pKota').textContent = kota;
+  else      document.getElementById('rowKota').style.display='none';
+
+  document.getElementById('hProyek').textContent  = proyek;
+  document.getElementById('hNominal').textContent = nomFmt;
+  document.getElementById('hROI').textContent     = roi;
+  document.getElementById('hDurasi').textContent  = durasi;
+  document.getElementById('hMulai').textContent   = tgl;
+  document.getElementById('hAkhir').textContent   = tglAkhir;
+
+  // Show doc
+  document.getElementById('formScreen').style.display = 'none';
+  document.getElementById('docScreen').style.display  = 'block';
+  window.scrollTo(0,0);
+
+  // Init canvas
+  initCanvas(2);
+}
+
+function backToForm() {
+  document.getElementById('docScreen').style.display  = 'none';
+  document.getElementById('formScreen').style.display = 'flex';
+  window.scrollTo(0,0);
+}
+
+// ── SIGNATURE CANVAS ──
+function initCanvas(id) {
+  const canvas = document.getElementById('sigCanvas'+id);
+  const wrap   = document.getElementById('canvasWrap'+id);
+  canvas.width = wrap.offsetWidth - 12;
+
+  let drawing = false, lx = 0, ly = 0;
+  const ctx = canvas.getContext('2d');
+  ctx.strokeStyle = '#1a1a6a';
+  ctx.lineWidth   = 2.2;
+  ctx.lineCap     = 'round';
+  ctx.lineJoin    = 'round';
+
+  function pos(e) {
+    const r = canvas.getBoundingClientRect();
+    const t = e.touches ? e.touches[0] : e;
+    return { x: (t.clientX - r.left) * (canvas.width / r.width), y: (t.clientY - r.top) * (canvas.height / r.height) };
+  }
+
+  canvas.addEventListener('mousedown',  e => { drawing=true; const p=pos(e); lx=p.x; ly=p.y; });
+  canvas.addEventListener('mousemove',  e => { if(!drawing) return; const p=pos(e); ctx.beginPath(); ctx.moveTo(lx,ly); ctx.lineTo(p.x,p.y); ctx.stroke(); lx=p.x; ly=p.y; });
+  canvas.addEventListener('mouseup',    () => drawing=false);
+  canvas.addEventListener('mouseleave', () => drawing=false);
+  canvas.addEventListener('touchstart', e => { e.preventDefault(); drawing=true; const p=pos(e); lx=p.x; ly=p.y; }, {passive:false});
+  canvas.addEventListener('touchmove',  e => { e.preventDefault(); if(!drawing) return; const p=pos(e); ctx.beginPath(); ctx.moveTo(lx,ly); ctx.lineTo(p.x,p.y); ctx.stroke(); lx=p.x; ly=p.y; }, {passive:false});
+  canvas.addEventListener('touchend',   () => drawing=false);
+}
+
+function clearSig(id) {
+  const canvas = document.getElementById('sigCanvas'+id);
+  canvas.getContext('2d').clearRect(0,0,canvas.width,canvas.height);
+  document.getElementById('sigSaved'+id).style.display  = 'none';
+  document.getElementById('canvasWrap'+id).style.display = 'block';
+  document.getElementById('sigCtrl'+id).style.display    = 'flex';
+}
+
+function saveSig(id) {
+  const canvas = document.getElementById('sigCanvas'+id);
+  const img    = document.getElementById('sigImg'+id);
+  img.src      = canvas.toDataURL();
+  document.getElementById('canvasWrap'+id).style.display = 'none';
+  document.getElementById('sigCtrl'+id).style.display    = 'none';
+  document.getElementById('sigSaved'+id).style.display   = 'block';
+}
+
+// ── METERAI ──
+function stampMeterai(id) {
+  const el   = document.getElementById('meterai'+id);
+  const hint = document.getElementById('metHint'+id);
+  el.classList.add('stamped');
+  el.style.cursor    = 'default';
+  el.style.boxShadow = '0 2px 8px rgba(139,26,26,.6), inset 0 1px 0 rgba(255,255,255,.15)';
+  hint.textContent   = '✓ Meterai ditempel';
+  hint.style.color   = '#8b1a1a';
+}
+</script>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-ov" id="regModal">
+  <div class="modal">
+    <button class="mcl" onclick="closeModal()">✕</button>
+    <div class="mtitle" id="mTitle">🌱 Daftar Investor</div>
+    <div class="msub" id="mSub">Isi data, transfer, kirim bukti ke WhatsApp kami. Konfirmasi dalam 1×24 jam.</div>
+    <div class="mtoggle">
+      <button class="mtbtn ai" id="mTI" onclick="setMode('invest')">💰 Investasi</button>
+      <button class="mtbtn" id="mTD" onclick="setMode('donate')">🤲 Donasi</button>
+    </div>
+    <div class="fg"><label class="fl2">Nama Lengkap</label><input class="fi" id="mNama" placeholder="Nama Anda"></div>
+    <div class="fg"><label class="fl2">Nomor WhatsApp</label><input class="fi" id="mWA" placeholder="08xxxxxxxxxx"></div>
+    <div class="fg"><label class="fl2">Pilih Proyek</label>
+      <select class="fi" id="mProyek">
+        <option>Jaga Ngariksa Leweung – Chayote Sukabumi</option>
+        <option>Jagung Manis – Majalengka</option>
+        <option>Kopi Arabica – Gayo Aceh</option>
+        <option>Kambing Etawa – Sukabumi</option>
+        <option>Sengon Cianjur</option>
+      </select>
+    </div>
+    <div class="fg"><label class="fl2">Nominal (Rp)</label><input class="fi" id="mNominal" type="number" placeholder="Minimal Rp 500.000"></div>
+    <div class="binfo">
+      <div class="bn">🏦 Bank Mandiri</div>
+      <div class="bnum">1820016298168</div>
+      <div class="bh">a.n. HUDRI – Baheulatani Nusantara</div>
+    </div>
+    <button class="sbtn" id="mSBtn" onclick="submitModal()">📲 Daftar via WhatsApp</button>
+  </div>
+</div>
+
+<!-- TAB BAR -->
+<div class="tab-bar" id="tabBar">
+  <div class="tab-indicator" id="tabInd" style="width:25%;left:0;"></div>
+  <button class="tab-btn active" id="tb1" onclick="switchTab(1)">
+    <span class="t-icon">🌿</span>
+    <span class="t-label">Beranda</span>
+  </button>
+  <button class="tab-btn" id="tb2" onclick="switchTab(2)">
+    <span class="t-icon">📱</span>
+    <span class="t-label">Konten</span>
+  </button>
+  <button class="tab-btn" id="tb3" onclick="switchTab(3)">
+    <span class="t-icon">📋</span>
+    <span class="t-label">Panduan</span>
+  </button>
+  <button class="tab-btn" id="tb4" onclick="switchTab(4)">
+    <span class="t-icon">📜</span>
+    <span class="t-label">Perjanjian</span>
+  </button>
+</div>
+
+<div class="toast" id="toast">✅ Tersalin!</div>
+
+<script>
+// ── TAB NAVIGATION ──
+function switchTab(n) {
+  [1,2,3,4].forEach(i => {
+    document.getElementById('page'+i).classList.toggle('active', i===n);
+    document.getElementById('tb'+i).classList.toggle('active', i===n);
+  });
+  const ind = document.getElementById('tabInd');
+  ind.style.left = ((n-1)*25)+'%';
+  window.scrollTo(0,0);
+  if(n===2 && !document.getElementById('kontenList').innerHTML) renderKonten();
+}
+
+// ── LEAF PARTICLES ──
+const lc = document.getElementById('heroLeaves');
+for(let i=0;i<16;i++){
+  const l=document.createElement('div');l.classList.add('lp');
+  const s=4+Math.random()*9;
+  l.style.cssText=`left:${Math.random()*100}%;width:${s}px;height:${s}px;animation-duration:${8+Math.random()*14}s;animation-delay:${Math.random()*12}s;background:rgba(74,158,48,${0.05+Math.random()*.12});`;
+  lc.appendChild(l);
+}
+
+// ── SCROLL REVEAL ──
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:.1});
+function observeAll(){document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));}
+observeAll();
+
+// ── PROJECTS ──
+const projects=[
+  {id:1,type:'investasi',cat:'Hortikultura',icon:'🌿',name:'Jaga Ngariksa Leweung',loc:'Pasir Ipis, Sukabumi',bg:'linear-gradient(135deg,#1a3d0a,#2d6a1f)',progress:68,roi:'28%',dur:'4 bulan',badges:['invest','new']},
+  {id:2,type:'investasi',cat:'Palawija',icon:'🌽',name:'Jagung Manis Majalengka',loc:'Majalengka, Jabar',bg:'linear-gradient(135deg,#3d3000,#7a6010)',progress:45,roi:'22%',dur:'3 bulan',badges:['invest']},
+  {id:3,type:'keduanya',cat:'Buah-buahan',icon:'☕',name:'Kopi Arabica Gayo',loc:'Gayo, Aceh',bg:'linear-gradient(135deg,#2d1a0a,#5a3a1a)',progress:82,roi:'35%',dur:'8 bulan',badges:['invest','donate']},
+  {id:4,type:'investasi',cat:'Ternak',icon:'🐐',name:'Kambing Etawa Sukabumi',loc:'Sukabumi, Jabar',bg:'linear-gradient(135deg,#2a1a00,#6b4c1a)',progress:30,roi:'40%',dur:'6 bulan',badges:['invest']},
+  {id:5,type:'keduanya',cat:'Pohon Tahunan',icon:'🌳',name:'Sengon Cianjur',loc:'Cianjur, Jabar',bg:'linear-gradient(135deg,#0d2206,#1a4a0d)',progress:55,roi:'45%',dur:'36 bulan',badges:['invest','donate']},
+  {id:6,type:'donasi',cat:'Hortikultura',icon:'🌾',name:'Pangan Desa Terpencil',loc:'Lebak, Banten',bg:'linear-gradient(135deg,#1a3020,#2d5040)',progress:91,roi:'—',dur:'Donasi',badges:['donate']}
+];
+function renderProjects(f='semua'){
+  const filtered=f==='semua'?projects:f==='investasi'?projects.filter(p=>p.type==='investasi'||p.type==='keduanya'):projects.filter(p=>p.type==='donasi'||p.type==='keduanya');
+  document.getElementById('projGrid').innerHTML=filtered.map(p=>`
+    <div class="pcard" onclick="openModal('invest')">
+      <div class="pthumb" style="background:${p.bg}">
+        <span>${p.icon}</span>
+        <div class="pto"></div>
+        <div class="ptbadges">
+          ${p.badges.includes('new')?'<span class="tbadge tb-n">BARU</span>':''}
+          ${p.badges.includes('invest')?'<span class="tbadge tb-i">Investasi</span>':''}
+          ${p.badges.includes('donate')?'<span class="tbadge tb-d">Donasi</span>':''}
+        </div>
+      </div>
+      <div class="pbody">
+        <div class="pcat">${p.cat}</div>
+        <div class="pname">${p.name}</div>
+        <div class="ploc">📍 ${p.loc}</div>
+        <div class="pbar-wrap">
+          <div class="pbar-hd"><span>Pendanaan</span><span class="pbar-pct">${p.progress}%</span></div>
+          <div class="pbar"><div class="pbar-fill" style="width:${p.progress}%"></div></div>
+        </div>
+        <div class="pmeta">
+          <div class="pm"><div class="pm-v">${p.roi}</div><div class="pm-l">ROI Est.</div></div>
+          <div class="pm"><div class="pm-v">${p.dur}</div><div class="pm-l">Durasi</div></div>
+        </div>
+      </div>
+    </div>`).join('');
+  setTimeout(observeAll,50);
+}
+function filterP(f,btn){document.querySelectorAll('.ptab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderProjects(f);}
+renderProjects();
+
+// ── MODAL ──
+function openModal(mode){document.getElementById('regModal').classList.add('open');setMode(mode);}
+function closeModal(){document.getElementById('regModal').classList.remove('open');}
+document.getElementById('regModal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+function setMode(m){
+  const ti=document.getElementById('mTI'),td=document.getElementById('mTD');
+  const btn=document.getElementById('mSBtn');
+  if(m==='invest'){
+    ti.className='mtbtn ai';td.className='mtbtn';
+    document.getElementById('mTitle').textContent='🌱 Daftar Investor';
+    document.getElementById('mSub').textContent='Isi data, transfer, kirim bukti ke WhatsApp kami. Konfirmasi dalam 1×24 jam.';
+    btn.textContent='📲 Daftar via WhatsApp';btn.style.background='var(--canopy)';
+  } else {
+    ti.className='mtbtn';td.className='mtbtn ad';
+    document.getElementById('mTitle').textContent='🤲 Donasi Sekarang';
+    document.getElementById('mSub').textContent='Donasi Anda langsung ke petani. Terima laporan dampak dan foto dokumentasi.';
+    btn.textContent='💛 Donasi via WhatsApp';btn.style.background='var(--gold)';
+  }
+}
+function submitModal(){
+  const nama=document.getElementById('mNama').value||'(belum diisi)';
+  const wa=document.getElementById('mWA').value||'(belum diisi)';
+  const proyek=document.getElementById('mProyek').value;
+  const nominal=document.getElementById('mNominal').value;
+  const mode=document.getElementById('mTI').classList.contains('ai')?'Investasi':'Donasi';
+  const msg=`Halo, saya ingin mendaftar sebagai ${mode} di TaniSaham – Baheulatani Nusantara.\n\nNama: ${nama}\nWA: ${wa}\nProyek: ${proyek}${nominal?'\nNominal: Rp '+Number(nominal).toLocaleString('id'):''}\n\nMohon konfirmasi langkah selanjutnya. 🌱`;
+  window.open('https://wa.me/6283871666136?text='+encodeURIComponent(msg),'_blank');
+  closeModal();
+}
+
+// ── 7 KONTEN ──
+const kontenData=[
+  {hari:1,warna:'linear-gradient(155deg,#0d2206,#1a4a0d)',dtag:'rgba(124,194,90,.2)',dtagC:'#7cc25a',icon:'🏔️',
+   q:'"Kami bukan startup.<br>Kami petani yang<br><em style="color:#7cc25a;">belajar teknologi.</em>"',
+   s:'Dari lereng Gunung Guruh, Sukabumi —<br>lahir untuk menjaga hutan & menghidupi petani.',
+   tema:'Perkenalan — Siapa Kami',
+   teks:`🏔️ KAMI BUKAN STARTUP KOTA.
+
+Kami lahir di antara pohon-pohon Gunung Guruh, Sukabumi. Kami tahu bagaimana tanah berbau setelah hujan. Kami tahu bagaimana petani menghitung bintang sebelum menanam.
+
+Bertahun-tahun kami berjuang mempertahankan hutan rakyat dari ancaman tambang. Kini kami membangun sesuatu yang lebih besar —
+
+Sebuah jembatan antara petani yang butuh modal dan Anda yang ingin berinvestasi dengan hati.
+
+Namanya: 🌱 TaniSaham – Baheulatani Nusantara
+Investasi kebun. Pantau dari HP. Panen bersama.
+
+Ini baru permulaan. Ikuti perjalanan kami. 👇`,
+   ht:'#TaniSaham #BaheulataniNusantara #InvestasiKebun #PetaniIndonesia #JagaNgariksa #GununGuruh #Sukabumi'},
+  {hari:2,warna:'linear-gradient(145deg,#2a1800,#5a3a10)',dtag:'rgba(201,150,10,.2)',dtagC:'#f0c840',icon:'💰',
+   q:'"Uang Anda bekerja<br>di tanah nyata —<br><em style="color:#f0c840;">bukan layar komputer.</em>"',
+   s:'Pilih kebun. Transfer. Pantau pertumbuhan.<br>Terima bagi hasil saat panen.',
+   tema:'Edukasi — Apa Itu Investasi Kebun',
+   teks:`💰 INVESTASI KEBUN ITU SEPERTI INI:
+
+1️⃣ Kamu pilih kebun — chayote, jagung, kopi, atau kambing
+2️⃣ Kamu transfer modal ke rekening resmi
+3️⃣ Petani mulai menanam atas namamu
+4️⃣ Setiap minggu kamu terima foto & laporan pertumbuhan
+5️⃣ Saat panen — bagi hasil masuk ke rekeningmu
+
+Bukan saham yang naik-turun tanpa arah.
+Bukan kripto yang bikin jantung berdebar.
+
+Ini NYATA. Tanahnya nyata. Petaninya nyata. Hasilnya nyata.
+
+ROI rata-rata: 25–40% per siklus tanam 🌾
+Minimal investasi: Rp 500.000
+
+🔗 malviejayagroup-prog.github.io/BTN_Tani_Saham`,
+   ht:'#InvestasiKebun #TaniSaham #BaheulataniNusantara #InvestasiHalal #CuanDariTani #PanenBersama'},
+  {hari:3,warna:'linear-gradient(160deg,#0a2010,#1a5a2a)',dtag:'rgba(74,158,48,.25)',dtagC:'#7cc25a',icon:'🌿',
+   q:'"<em style=\'color:#7cc25a;\'>Jaga Ngariksa Leweung</em><br>— menjaga dan memelihara<br>hutan untuk semua."',
+   s:'Kebun Chayote · Pasir Ipis, Sukabumi<br>ROI 28% · Durasi 4 Bulan · Slot terbatas',
+   tema:'Proyek Unggulan — Jaga Ngariksa',
+   teks:`🌿 "JAGA NGARIKSA LEWEUNG"
+
+Dalam bahasa Sunda, artinya: "Menjaga dan memelihara hutan."
+
+Ini bukan sekadar nama program.
+Ini adalah sumpah kami kepada tanah Gunung Guruh.
+
+Di Kampung Pasir Ipis, Sukabumi — kami menanam chayote (labu siam) di lahan yang pernah terancam tambang.
+
+🟢 PROYEK PERDANA KAMI:
+📍 Lokasi: Pasir Ipis, Sukabumi
+🌿 Komoditas: Chayote (Labu Siam)
+📈 ROI Estimasi: 28%
+⏱ Durasi: 4 bulan
+💰 Minimal investasi: Rp 500.000
+
+68% slot sudah terisi. Sisa terbatas.
+
+Mau jadi bagian dari perjuangan ini? 👇`,
+   ht:'#JagaNgariksa #ChayoteFarm #LabuSiam #Sukabumi #TaniSaham #BaheulataniNusantara #KonservasiHutan'},
+  {hari:4,warna:'linear-gradient(145deg,#0d0d2a,#1a1a5a)',dtag:'rgba(100,100,255,.2)',dtagC:'#a0a0ff',icon:'🔍',
+   q:'"Setiap rupiah bisa<br>dilacak. Setiap keputusan<br><em style="color:#a0c8ff;">bisa dipertanyakan.</em>"',
+   s:'Petani 60% · Investor 20% · Ops 12%<br>Cadangan 5% · Platform 3%',
+   tema:'Kepercayaan — Transparansi Dana',
+   teks:`🔍 PERTANYAAN YANG SERING KAMI TERIMA:
+
+"Bagaimana saya tahu uang saya tidak hilang?"
+
+Jawaban kami sederhana — lihat sendiri.
+
+📊 DISTRIBUSI DANA:
+🌾 Petani: 60%
+💰 Investor: 20%
+⚙️ Operasional: 12%
+🛡️ Cadangan: 5%
+🏢 Platform: 3%
+
+📋 BUKTI TRANSPARANSI:
+✓ Laporan keuangan publik di Google Sheets
+✓ Foto kebun dikirim setiap minggu
+✓ Bisa kunjungi kebun kapanpun
+
+Kami tidak minta Anda percaya begitu saja.
+Kami minta Anda verifikasi sendiri.`,
+   ht:'#Transparansi #InvestasiAman #TaniSaham #BaheulataniNusantara #InvestasiTerpercaya'},
+  {hari:5,warna:'linear-gradient(150deg,#2a0a00,#6a2a00)',dtag:'rgba(201,150,10,.2)',dtagC:'#f5c840',icon:'🤲',
+   q:'"Ada investasi yang<br>tidak diukur dengan rupiah —<br><em style="color:#f5c840;">tapi dengan kebaikan.</em>"',
+   s:'Donasi untuk petani kecil. Terima sertifikat pohon.<br>Lihat dampak nyata dari setiap donasi Anda.',
+   tema:'Donasi — Untuk Yang Ingin Memberi',
+   teks:`🤲 UNTUK KAMU YANG INGIN MEMBERI TANPA MENGHARAP KEMBALI.
+
+Di TaniSaham, ada dua pintu:
+Satu pintu untuk investor — yang ingin modal berkembang.
+Satu pintu lagi untuk KAMU — yang hatinya lebih luas dari hitungan untung-rugi.
+
+🌳 MODE DONASI:
+→ Bantu petani kecil yang tidak punya akses modal
+→ Terima sertifikat pohon atas nama kamu
+→ Lihat foto & cerita dampak donasimu
+→ Berkontribusi pada konservasi hutan nyata
+
+Dalam Islam, sedekah jariyah mengalir tanpa batas waktu.
+Pohon yang kamu tanam hari ini — akan bernapas untuk generasi yang belum lahir.
+
+Donasi mulai Rp 50.000.`,
+   ht:'#SedekahJariyah #DonasiPetani #TaniSaham #BaheulataniNusantara #TanamKebaikan #SertifikatPohon'},
+  {hari:6,warna:'linear-gradient(155deg,#061a0d,#0d4020)',dtag:'rgba(37,211,102,.15)',dtagC:'#25D366',icon:'📲',
+   q:'"Daftar investor<br>semudah chat<br><em style="color:#25D366;">WhatsApp biasa.</em>"',
+   s:'1. Chat WA · 2. Pilih proyek · 3. Transfer<br>Selesai. Anda sudah jadi investor kebun.',
+   tema:'Cara Daftar — Semudah Chat WA',
+   teks:`📲 CARA DAFTAR JADI INVESTOR KEBUN:
+
+LANGKAH 1️⃣
+Chat WA 083871666136
+Bilang: "Saya mau investasi kebun"
+
+LANGKAH 2️⃣
+Pilih proyek:
+🌿 Chayote Sukabumi (ROI 28%, 4 bln)
+🌽 Jagung Majalengka (ROI 22%, 3 bln)
+☕ Kopi Gayo (ROI 35%, 8 bln)
+🐐 Kambing Etawa (ROI 40%, 6 bln)
+🌳 Sengon Cianjur (ROI 45%, jangka panjang)
+
+LANGKAH 3️⃣
+Transfer ke:
+🏦 Bank Mandiri: 1820016298168
+a.n. HUDRI – Baheulatani Nusantara
+
+LANGKAH 4️⃣
+Kirim bukti transfer ke WA ✅
+
+SELESAI. Kamu sudah jadi petani digital Indonesia! 🌱`,
+   ht:'#CaraDaftar #TaniSaham #BaheulataniNusantara #InvestasiMudah #PetaniDigital'},
+  {hari:7,warna:'linear-gradient(150deg,#0d2206,#1a4a0d,#3d2b0a)',dtag:'rgba(201,150,10,.25)',dtagC:'#f5c840',icon:'🌾',
+   q:'"Pohon terbaik adalah yang<br>ditanam dua puluh tahun lalu.<br><em style="color:#f0c840;">Yang kedua terbaik — hari ini.</em>"',
+   s:'',
+   tema:'Seruan Penutup — Waktunya Bertindak',
+   teks:`🌾 7 HARI SUDAH SAYA CERITAKAN SEGALANYA.
+
+Tentang hutan yang hampir hilang.
+Tentang petani yang butuh rekan.
+Tentang investasi yang terasa di tanah, bukan di layar.
+
+Sekarang tinggal satu pertanyaan:
+
+𝗔𝗽𝗮𝗸𝗮𝗵 𝗔𝗻𝗱𝗮 𝗮𝗸𝗮𝗻 𝗶𝗸𝘂𝘁?
+
+🌱 TaniSaham – Baheulatani Nusantara
+"Tanam Saham, Panen Bersama"
+
+💰 Investasi mulai Rp 500.000
+🤲 Donasi mulai Rp 50.000
+📱 WA: 083871666136
+🏦 Mandiri: 1820016298168 (HUDRI)
+
+🔗 malviejayagroup-prog.github.io/BTN_Tani_Saham
+
+Sebarkan jika kamu percaya pada pertanian rakyat Indonesia. 🙏`,
+   ht:'#TaniSaham #BaheulataniNusantara #InvestasiKebun #PetaniIndonesia #JagaNgariksa #TanamSahamPanenBersama'}
+];
+
+function renderKonten(){
+  document.getElementById('kontenList').innerHTML=kontenData.map((k,i)=>`
+    <div class="day-sec">
+      <div class="day-hd">
+        <div class="day-bub" style="background:${k.warna}">
+          <span style="font-size:8px">HARI</span>
+          <span style="font-size:20px;font-weight:900">${k.hari}</span>
+        </div>
+        <div>
+          <div class="day-sub">Hari ke-${k.hari}</div>
+          <div class="day-title">${k.tema}</div>
+        </div>
+      </div>
+      <div class="day-wrap">
+        <div class="poster" style="background:${k.warna}">
+          <div class="poster-brand">TaniSaham · Baheulatani Nusantara</div>
+          <div class="poster-dtag" style="background:${k.dtag};color:${k.dtagC}">Hari ${k.hari}</div>
+          <div class="poster-icon">${k.icon}</div>
+          <div class="poster-q" style="color:#f5ead8;">${k.q}</div>
+          ${k.s?`<div class="poster-s" style="color:#f5ead8;">${k.s}</div>`:''}
+          <div class="poster-link">🔗 malviejayagroup-prog.github.io/BTN_Tani_Saham</div>
+        </div>
+        <div class="copy-col">
+          <div>
+            <div class="copy-lbl">Caption Instagram / Status WA</div>
+            <div class="copy-box">
+              <div class="copy-text" id="kt${k.hari}">${k.teks}</div>
+              <button class="copy-btn" onclick="salin('kt${k.hari}',this)">📋 Salin Caption</button>
+            </div>
+          </div>
+          <div class="ht-box">${k.ht}</div>
+          <a class="wa-btn2" href="https://wa.me/?text=${encodeURIComponent(k.teks+'\n\n🔗 malviejayagroup-prog.github.io/BTN_Tani_Saham')}" target="_blank">💬 Bagikan via WhatsApp</a>
+        </div>
+      </div>
+      ${i<6?'<hr class="day-divider">':''}
+    </div>`).join('');
+}
+
+// ── PANDUAN STEPS ──
+function togglePS(id){document.getElementById(id).classList.toggle('open');}
+
+// ── PERJANJIAN FUNCTIONS ──
+
+// ── GENERATE DOC ──
+function generateDoc() {
+  const nama    = document.getElementById('nama').value.trim();
+  const wa      = document.getElementById('wa').value.trim();
+  const nominal = parseFloat(document.getElementById('nominal').value);
+
+  if (!nama) { alert('Nama investor wajib diisi.'); return; }
+  if (!wa)   { alert('Nomor WhatsApp wajib diisi.'); return; }
+  if (!nominal || nominal < 500000) { alert('Nominal investasi minimal Rp 500.000.'); return; }
+
+  const ktp     = document.getElementById('ktp').value.trim();
+  const kota    = document.getElementById('kota').value.trim();
+  const alamat  = document.getElementById('alamat').value.trim();
+  const proyek  = document.getElementById('proyek').value;
+  const durasi  = document.getElementById('durasi').value;
+  const roi     = document.getElementById('roi').value;
+
+  // Tanggal
+  const now    = new Date();
+  const bulan  = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  const hari   = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  const hariNm = hari[now.getDay()];
+  const tgl    = `${now.getDate()} ${bulan[now.getMonth()]} ${now.getFullYear()}`;
+
+  // Estimasi akhir
+  const bln    = parseInt(durasi);
+  const akhir  = new Date(now);
+  akhir.setMonth(akhir.getMonth() + bln);
+  const tglAkhir = `${akhir.getDate()} ${bulan[akhir.getMonth()]} ${akhir.getFullYear()}`;
+
+  // Nomor surat
+  const nomo = `No. BTN-${String(now.getFullYear()).slice(-2)}${String(now.getMonth()+1).padStart(2,'0')}-${String(Math.floor(Math.random()*9000)+1000)}`;
+
+  // Nominal terbilang (simple)
+  const nomFmt = 'Rp ' + nominal.toLocaleString('id-ID') + ',-';
+
+  // Fill doc
+  document.getElementById('docNomor').textContent   = nomo;
+  document.getElementById('hariDoc').textContent    = hariNm;
+  document.getElementById('tanggalDoc').textContent = tgl;
+  document.getElementById('ttdTanggal').textContent = tgl;
+
+  document.getElementById('pNama').textContent  = nama.toUpperCase();
+  document.getElementById('pWA').textContent    = wa;
+  document.getElementById('ttdNama').textContent = nama.toUpperCase();
+
+  if (ktp) { document.getElementById('pKTP').textContent = ktp; document.getElementById('ttdKtp').textContent = 'NIK: '+ktp; }
+  else      { document.getElementById('rowKTP').style.display='none'; }
+
+  if (alamat) document.getElementById('pAlamat').textContent = alamat;
+  else        document.getElementById('rowAlamat').style.display='none';
+
+  if (kota) document.getElementById('pKota').textContent = kota;
+  else      document.getElementById('rowKota').style.display='none';
+
+  document.getElementById('hProyek').textContent  = proyek;
+  document.getElementById('hNominal').textContent = nomFmt;
+  document.getElementById('hROI').textContent     = roi;
+  document.getElementById('hDurasi').textContent  = durasi;
+  document.getElementById('hMulai').textContent   = tgl;
+  document.getElementById('hAkhir').textContent   = tglAkhir;
+
+  // Show doc
+  document.getElementById('formScreen').style.display = 'none';
+  document.getElementById('docScreen').style.display  = 'block';
+  window.scrollTo(0,0);
+
+  // Init canvas
+  initCanvas(2);
+}
+
+function backToForm() {
+  document.getElementById('docScreen').style.display  = 'none';
+  document.getElementById('formScreen').style.display = 'flex';
+  window.scrollTo(0,0);
+}
+
+// ── SIGNATURE CANVAS ──
+function initCanvas(id) {
+  const canvas = document.getElementById('sigCanvas'+id);
+  const wrap   = document.getElementById('canvasWrap'+id);
+  canvas.width = wrap.offsetWidth - 12;
+
+  let drawing = false, lx = 0, ly = 0;
+  const ctx = canvas.getContext('2d');
+  ctx.strokeStyle = '#1a1a6a';
+  ctx.lineWidth   = 2.2;
+  ctx.lineCap     = 'round';
+  ctx.lineJoin    = 'round';
+
+  function pos(e) {
+    const r = canvas.getBoundingClientRect();
+    const t = e.touches ? e.touches[0] : e;
+    return { x: (t.clientX - r.left) * (canvas.width / r.width), y: (t.clientY - r.top) * (canvas.height / r.height) };
+  }
+
+  canvas.addEventListener('mousedown',  e => { drawing=true; const p=pos(e); lx=p.x; ly=p.y; });
+  canvas.addEventListener('mousemove',  e => { if(!drawing) return; const p=pos(e); ctx.beginPath(); ctx.moveTo(lx,ly); ctx.lineTo(p.x,p.y); ctx.stroke(); lx=p.x; ly=p.y; });
+  canvas.addEventListener('mouseup',    () => drawing=false);
+  canvas.addEventListener('mouseleave', () => drawing=false);
+  canvas.addEventListener('touchstart', e => { e.preventDefault(); drawing=true; const p=pos(e); lx=p.x; ly=p.y; }, {passive:false});
+  canvas.addEventListener('touchmove',  e => { e.preventDefault(); if(!drawing) return; const p=pos(e); ctx.beginPath(); ctx.moveTo(lx,ly); ctx.lineTo(p.x,p.y); ctx.stroke(); lx=p.x; ly=p.y; }, {passive:false});
+  canvas.addEventListener('touchend',   () => drawing=false);
+}
+
+function clearSig(id) {
+  const canvas = document.getElementById('sigCanvas'+id);
+  canvas.getContext('2d').clearRect(0,0,canvas.width,canvas.height);
+  document.getElementById('sigSaved'+id).style.display  = 'none';
+  document.getElementById('canvasWrap'+id).style.display = 'block';
+  document.getElementById('sigCtrl'+id).style.display    = 'flex';
+}
+
+function saveSig(id) {
+  const canvas = document.getElementById('sigCanvas'+id);
+  const img    = document.getElementById('sigImg'+id);
+  img.src      = canvas.toDataURL();
+  document.getElementById('canvasWrap'+id).style.display = 'none';
+  document.getElementById('sigCtrl'+id).style.display    = 'none';
+  document.getElementById('sigSaved'+id).style.display   = 'block';
+}
+
+// ── METERAI ──
+function stampMeterai(id) {
+  const el   = document.getElementById('meterai'+id);
+  const hint = document.getElementById('metHint'+id);
+  el.classList.add('stamped');
+  el.style.cursor    = 'default';
+  el.style.boxShadow = '0 2px 8px rgba(139,26,26,.6), inset 0 1px 0 rgba(255,255,255,.15)';
+  hint.textContent   = '✓ Meterai ditempel';
+  hint.style.color   = '#8b1a1a';
+}
+
+
+// ── COPY ──
+function salin(id,btn){
+  const t=document.getElementById(id).innerText;
+  navigator.clipboard.writeText(t).then(()=>{
+    const o=btn.textContent;btn.textContent='✅ Tersalin!';
+    btn.style.background='var(--canopy)';btn.style.color='white';
+    setTimeout(()=>{btn.textContent=o;btn.style.background='var(--mist)';btn.style.color='var(--forest)';},2000);
+    showToast();
+  });
+}
+function copyC(t,btn){
+  navigator.clipboard.writeText(t).then(()=>{
+    const o=btn.textContent;btn.textContent='✅';
+    setTimeout(()=>btn.textContent=o,2000);
+    showToast();
+  });
+}
+function showToast(){
+  const t=document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+</script>
+</body>
+</html>
